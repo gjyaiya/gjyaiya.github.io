@@ -1,0 +1,116 @@
+{% extends "layout.html" %}
+{% block import %}
+<link href="/static/prettify/prettify.css" rel="stylesheet">
+<link href="/static/prettify/markdown.css" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<div id="laputa_content" class="row" >
+	<div id="article_content" class="col-md-9 col-sm-8" >
+		<h3 id="title"><a href="/laputa/id/{{blog['_id']|safe}}">{{blog["title"]|safe}}</a></h3><hr>
+		<div id="info" class="text-right">
+			{{blog["author"]}}&nbsp;&middot;&nbsp;
+			{{blog["date"]}}&nbsp;&middot;&nbsp;
+			{{blog["category"]}}
+		</div>
+		<div id="content">{{blog["content"]}}</div><hr>
+		<div id="tags" class='text-right' style="margin-bottom:10px;">
+		{% for tag in blog["tags"] %}
+			<a href="/laputa/tags/{{tag}}/" class="label label-info" style="padding:5px">{{tag}}</a>&nbsp;
+		{% endfor %}
+		</div>
+		<div id="comments" class="col-md-11">
+		{% if blog["comments"] %}
+		{% for comment in blog["comments"] %}
+			<div class="panel panel-default">
+				<div class="panel-heading" id="info"><a href="#">@{{comment['reviewer']|safe}}</a>&nbsp;{{comment['date']|safe}}&nbsp;写道:</div>
+				<div class="panel-body comment">{{comment['content']|safe}}</div>
+			</div>
+		{% endfor %}
+		{% else %}
+			<div class="panel panel-default">
+				<div class="panel-body comment">囧&nbsp;还没有添加评论...</div>
+			</div>
+		{% endif %}
+			<div class="panel panel-default" >
+				<div class="panel-heading">添加评论:</div>
+				<div class="panel-body" id="wdm_editor">
+					<div class="wmd-panel">
+						<div id="wmd-button-bar"></div>
+						<textarea class="wmd-input" id="wmd-input"></textarea>
+						<button type="button" class="btn btn-info" onclick=addcomment() style="margin:0 30px;">提交评论</button>
+						<div id="wmd-preview" class="wmd-panel wmd-preview"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="sidebar" class="col-md-3 col-sm-4 hidden-xs" ><div class="row">
+		<div id="sidebar_aboutme" class="hidden-xs col-xs-12">
+			<h3>关于作者</h3>
+			<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;工作于某手机研发公司，参与Android系统设计。对Python，Js非常感兴趣，喜欢写脚本分析数据，处理重复的工作。</p>
+			<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;热爱互联网，热爱开源。严重代码洁癖。梦想有一天，让许多许多人喜欢上自己写的程序。</p>
+			<hr>
+		</div>
+		<div id="sidebar_category" class="hidden-xs col-xs-12" >
+			<h3>文章分类</h3>
+			<div id="sidebar_category_content">
+				<hr><a href="/laputa/category/algorithm/" >算法 && 数据</a>
+				<hr><a href="/laputa/category/design/" >程序 && 设计</a>
+				<hr><a href="/laputa/category/web/" >网络 && 前端</a>
+				<hr><a href="/laputa/category/interest/" >兴趣 && 科学</a>
+			</div><hr>
+		</div>
+		<div id="sidebar_tags" class="hidden-xs col-xs-12" >
+			<h3>热门标签</h3>
+			<div id="sidebar_tags_content">
+				<a href="/laputa/tags/python/" class="label label-info" style="padding:5px">Python</a>
+				<a href="/laputa/tags/android/" class="label label-primary" style="padding:5px">Android</a>
+				<a href="/laputa/tags/javascript/" class="label label-info" style="padding:5px">JavaScript</a>
+				<a href="/laputa/tags/bootstrap/" class="label label-success" style="padding:5px">Bootstrap</a>
+				<a href="/laputa/tags/flask/" class="label label-warning" style="padding:5px">Flask</a>
+				<a href="/laputa/tags/design/" class="label label-primary" style="padding:5px">设计模式</a>
+				<a href="/laputa/tags/mongo/" class="label label-info" style="padding:5px">MongoDB</a>
+			</div>
+		</div>
+	</div></div>
+</div>
+{% endblock %}
+{% block script %}
+<script src="/static/prettify/Markdown.Converter.js"></script>
+<script src="/static/prettify/Markdown.Sanitizer.js"></script>
+<script src="/static/prettify/Markdown.Editor.js"></script>
+<script src="/static/prettify/prettify.js"></script>
+<script>
+function addcomment(){
+	comment={
+		"id":"{{blog['_id']|safe}}",
+		"content":$("#wmd-input").val()
+	};
+	$.post("/laputa/addcomment",comment,function(data,status){
+		if(status=="success"){
+			alert("评论成功~");
+			location.reload();
+		}else{
+			alert("添加失败 网络不好呢T^T");
+			location.reload();
+		}
+	});
+}
+var converter = Markdown.getSanitizingConverter();
+converter.hooks.chain("postConversion", function (text) {
+		text=text.replace(/(<pre>)/g, "<pre class='prettyprint linenums no-phone'>");
+		return text;
+	});
+$("#content").html(converter.makeHtml($("#content").text()));
+$(".comment").each(function(){$(this).html(converter.makeHtml($(this).text()))});
+$(".comment").each(function(){console.log($(this).text())});
+prettyPrint();
+var editor = new Markdown.Editor(converter);
+editor.run();
+$(document).ready(function () {
+	$('[data-toggle="offcanvas"]').click(function () {
+		$('.row-offcanvas').toggleClass('active')
+	});
+});
+</script>
+{% endblock %}

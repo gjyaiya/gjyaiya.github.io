@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="author" content="vimous" />
+	<link rel="shortcut icon" href="/static/favicon.png">
+	<title> {{ page.title }} </title>
+	<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/static/css/laputa.css" rel="stylesheet">
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	<script src="http://cdn.bootcss.com/html5shiv/3.7.0/html5shiv.js"></script>
+	<script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+</head>
+<body>
+    <nav class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/"><img src='/static/img/laputa.png'/></a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="/laputa/">主页</a></li>
+            <li><a href="/laputa/aboutme">关于我</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+	<div class="container">
+    
+    {{ content }}
+    
+	<footer class="text-center" role="contentinfo">
+		<div class="container">
+		<hr>
+		<ul class="list-inline muted hidden-xs">
+		   <li><a href="http://flask.pocoo.org/">Flask</a></li>
+		   <li>&middot;</li>
+		   <li><a href="http://v3.bootcss.com">BootStrap</a></li>
+		   <li>&middot;</li>
+		   <li><a href="http://www.w3school.com.cn/">w3school</a></li>
+		   <li>&middot;</li>
+		   <li><a href="/castle/">Castle</a></li>
+		</ul>
+		<p>当前版本: 0.1.0 | Author : Vimous  &middot; Powered By Flask |  &copy; 2014-2015</p>
+		</div>
+	</footer>
+	</div>
+	<a id='gotop' href='#'>
+		<span>▲</span>
+	</a>
+</body>
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script>
+	$(function(){
+		$(window).scroll(function(){ 
+			var scrollt = document.documentElement.scrollTop + document.body.scrollTop;
+			if( scrollt >200 ){ 
+				$("#gotop").fadeIn(400);
+			}else{
+				$("#gotop").stop().fadeOut(400);
+			}
+		});
+		$("#gotop").click(function(){ 
+			$("html,body").animate({scrollTop:"0px"},200);
+		});
+		$('#modaltrigger').leanModal({ top: 110, overlay: 0.45});
+	});
+</script>
+{% block script %}{% endblock %}
+</html>
