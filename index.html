@@ -8,9 +8,11 @@ title: Laputa
     <div class="row">
         <div class="col-lg-12"">
             <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
-            <p class="text-right">
-                <span class="label label-info">{{ post.date | date_to_string }}</span>
-            </p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;{{ post.abstract }}</p>
+			<p class="text-right">
+				<span class="label label-warning">{{ post.author }}</span>
+				&sdot; <span class="label label-info">{{ post.date | date_to_string }}</span>
+			</p>
         </div>
     </div><hr>
     {% endfor %}

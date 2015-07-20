@@ -2,8 +2,9 @@
 layout: blog
 title: 你好，世界
 author: vimous
-abstract: abstract
+category: python
 tags: python sdk
+abstract: abstract
 ---
 
 ###Hello world
