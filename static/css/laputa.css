@@ -35,7 +35,7 @@ a:active {text-decoration:none;}
 
 #article_list {background-color:#FFF;padding-right:20px;padding-top:10px; }
 #article_list .thumbnail{border:1px solid rgba(255, 255, 255, 0);}
-#article_content {background-color:#FFF;padding-right:20px;padding-top:10px;padding-left:30px }
+#article_content {background-color:#FFF;padding-right:20px;padding-top:10px;padding-left:30px;padding-left:30px }
 #article_content #info{font-family:Microsoft YaHei,SimHei; color:#0786C2;}
 #sidebar {background-color:#FFF;padding-left:30px;padding-bottom:30px;}
 #sidebar_aboutme{}
