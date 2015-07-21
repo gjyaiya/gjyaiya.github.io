@@ -2,7 +2,7 @@
 layout: blog
 title: 你好，世界
 author: vimous
-category: Interest
+category: Web
 tags: python sdk
 abstract: MongoDB 基本操作
 ---
