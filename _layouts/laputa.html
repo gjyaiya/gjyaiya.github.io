@@ -90,21 +90,28 @@
 <script src="/static/js/jquery.min.js"></script>
 <script src="/static/js/bootstrap.min.js"></script>
 <script src="/static/js/prettify.js"></script>
+<script src="/static/Markdown.Converter.js"></script>
+<script src="/static/Markdown.Sanitizer.js"></script>
 <script>
-	$(function(){
-		$(window).scroll(function(){ 
-			var scrollt = document.documentElement.scrollTop + document.body.scrollTop;
-			if( scrollt >200 ){ 
-				$("#gotop").fadeIn(400);
-			}else{
-				$("#gotop").stop().fadeOut(400);
-			}
-		});
-		$("#gotop").click(function(){ 
-			$("html,body").animate({scrollTop:"0px"},200);
-		});
-        $("pre").addClass("prettyprint linenums");
-        prettyPrint();
+$(function(){
+	$(window).scroll(function(){ 
+		var scrollt = document.documentElement.scrollTop + document.body.scrollTop;
+		if( scrollt >200 ){ 
+			$("#gotop").fadeIn(400);
+		}else{
+			$("#gotop").stop().fadeOut(400);
+		}
 	});
+	$("#gotop").click(function(){ 
+		$("html,body").animate({scrollTop:"0px"},200);
+	});
+    var converter = Markdown.getSanitizingConverter();
+    converter.hooks.chain("postConversion", function (text) {
+            text=text.replace(/(<pre>)/g, "<pre class='prettyprint linenums no-phone'>");
+            return text;
+        });
+    $("#content").html(converter.makeHtml($("#content").text()));
+    prettyPrint();
+});
 </script>
 </html>
