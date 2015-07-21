@@ -1,5 +1,5 @@
 html,body {overflow-x: hidden; /* Prevent scroll on narrow devices */}
-html {position: relative;min-height: 100%;}
+html {position: relative;min-height: 100%;font-family:consolas,Microsoft YaHei,SimHei}
 body {background-color: #efeee4;padding-top: 70px;margin-bottom: 101px;}
 blockquote {font-size: 14px;border-left:3px solid #15a230;}
 footer {position: absolute;bottom: 0;height: 101px;}
