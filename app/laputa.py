@@ -31,4 +31,5 @@ def tag_list(tag):
 @app.route('/article/<article>/')
 def show_article(article):
     article = pages.get(article)
+    article.html = article.html.replace('<pre>', "<pre class='prettyprint linenums no-phone'>")
     return render_template('article.html', article=article)
