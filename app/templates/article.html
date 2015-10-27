@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 <div id="article_content" class="col-md-9 col-sm-8" >
-	<h3 id="title"><a href="{{ article.url }}">{{ article.title }}</a></h3><hr>
+	<h3 id="title"><a href="{{ url_for('show_article',article=article.url) }}">{{ article.title }}</a></h3><hr>
 	<div id="info" class="text-right">
 		{{ article.author }}&nbsp;&middot;&nbsp;
 		{{ article.date}}&nbsp;&middot;&nbsp;
@@ -10,7 +10,7 @@
 	<div id="content">{{ article.body }}</div><hr>
 	<div id="tags" class='text-right' style="margin-bottom:10px;">
 	{% for tag in article.tags %}
-		<a href="/" class="label label-info" style="padding:5px">{{tag}}</a>&nbsp;
+		<a href="{{ url_for('tag_list',tag='{{tag}}') }}" class="label label-info tags">{{tag}}</a>&nbsp;
 	{% endfor %}
 	</div>
 </div>

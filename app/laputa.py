@@ -13,18 +13,19 @@ freezer = Freezer(app)
 @app.route('/page/<int:page>')
 def index(page=0):
     articles = [item for item in pages]
-    print(articles)
     return render_template('index.html', articles=articles)
 
 
 @app.route('/category/<category>')
-def category(category):
-    return render_template('index.html')
+def category_list(category):
+    articles = [item for item in pages if category == item['category']]
+    return render_template('index.html', articles=articles)
 
 
 @app.route('/tag/<tag>')
-def tag(tag):
-    return render_template('index.html')
+def tag_list(tag):
+    articles = [item for item in pages if tag in item['tags']]
+    return render_template('index.html', articles=articles)
 
 
 @app.route('/article/<article>')
