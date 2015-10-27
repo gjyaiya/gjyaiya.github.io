@@ -3,15 +3,8 @@ from flask import Flask, render_template
 from flask.ext.frozen import Freezer
 from flask_flatpages import FlatPages
 
-# configuration
-DEBUG = True
-FLATPAGES_AUTO_RELOAD = DEBUG
-FLATPAGES_EXTENSION = '.md'
-
-
-# create our little application :)
 app = Flask(__name__)
-app.config.from_object(__name__)
+app.config.from_pyfile('settings.py')
 pages = FlatPages(app)
 freezer = Freezer(app)
 
@@ -38,7 +31,3 @@ def tag(tag):
 def show_article(article):
     article = pages.get(article)
     return render_template('article.html', article=article)
-
-
-if __name__ == '__main__':
-    app.run(debug=DEBUG)
