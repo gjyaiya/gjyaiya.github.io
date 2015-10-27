@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block content %}
+<div id="article_list" class="col-md-9 col-sm-8" >
+    {% for article in articles %}
+    <div class="row">
+        <div class="col-lg-12" style="padding-left:35px">
+            <h3><a href="/article/{{ article.url }}">{{ article.title }}</a></h3>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;{{ article.abstract }}</p>
+			<p class="text-right">
+				<span class="label label-warning" style="padding:3px">{{ article.author }}</span>
+				&sdot; <span class="label label-info" style="padding:3px">{{ article.date}}</span>
+			</p>
+        </div>
+    </div><hr>
+    {% endfor %}
+    <nav class="text-center" id="article_pager"></nav>
+</div>
+{% endblock %}
