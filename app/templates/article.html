@@ -10,7 +10,7 @@
 	<div id="content">{{ article.body }}</div><hr>
 	<div id="tags" class='text-right' style="margin-bottom:10px;">
 	{% for tag in article.tags %}
-		<a href="{{ url_for('tag_list',tag='{{tag}}') }}" class="label label-info tags">{{tag}}</a>&nbsp;
+		<a href="{{ url_for('tag_list',tag=tag) }}" class="label label-info tags">{{tag}}</a>&nbsp;
 	{% endfor %}
 	</div>
 </div>

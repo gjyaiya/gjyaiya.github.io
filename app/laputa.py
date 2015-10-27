@@ -10,25 +10,25 @@ freezer = Freezer(app)
 
 
 @app.route('/')
-@app.route('/page/<int:page>')
+@app.route('/page/<int:page>/')
 def index(page=0):
     articles = [item for item in pages]
     return render_template('index.html', articles=articles)
 
 
-@app.route('/category/<category>')
+@app.route('/category/<category>/')
 def category_list(category):
     articles = [item for item in pages if category == item['category']]
     return render_template('index.html', articles=articles)
 
 
-@app.route('/tag/<tag>')
+@app.route('/tag/<tag>/')
 def tag_list(tag):
     articles = [item for item in pages if tag in item['tags']]
     return render_template('index.html', articles=articles)
 
 
-@app.route('/article/<article>')
+@app.route('/article/<article>/')
 def show_article(article):
     article = pages.get(article)
     return render_template('article.html', article=article)
