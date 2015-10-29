@@ -18,7 +18,7 @@ a:active {text-decoration:none;}
 #article_content #info{  font-family: Microsoft YaHei, SimHei, serif; color:#0786C2;margin-bottom: 10px;}
 #sidebar {background-color:#FFF;padding-left:30px;padding-bottom:30px;}
 #sidebar_category_content{padding:0 5px;}
-#sidebar_category_content hr{margin:5px 20px 5px 0;}
+#sidebar_category_content hr{margin:5px 20px 5px 0;border-bottom: 1px dotted #ccc;border-top:none; width: 100%; height:1px;}
 .tags{margin:1px 2px;display: inline-block;padding:5px}
 
 /*===============go top===============*/

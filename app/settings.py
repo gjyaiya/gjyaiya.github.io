@@ -11,7 +11,7 @@ def parent_dir(path):
 
 PROJECT_ROOT = parent_dir(APP_DIR)
 FREEZER_DESTINATION = PROJECT_ROOT
-FREEZER_BASE_URL = "http://gjyaiya.github.io/"
+FREEZER_BASE_URL = "http://www.gjyaiya.xyz/"
 # FREEZER_REMOVE_EXTRA_FILES = False
 FREEZER_DESTINATION_IGNORE = ['.git*', '.idea/*', 'app/*', '*.py', 'READ*']
 
