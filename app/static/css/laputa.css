@@ -1,8 +1,8 @@
 html,body {overflow-x: hidden; /* Prevent scroll on narrow devices */}
 html {position: relative;min-height: 100%;font-family: consolas, Microsoft YaHei, SimHei, serif}
-body {background-color: #efeee4;padding-top: 70px;margin-bottom: 101px;}
+body {background-color: #efeee4;padding-top: 70px;margin-bottom: 80px;}
 blockquote {font-size: 14px;border-left:3px solid #15a230;}
-footer {position: absolute;bottom: 0;height: 101px;}
+footer {position: absolute;bottom: 0;height: 80px;}
 #navbar,h1,h2,h3{font-family: Microsoft YaHei, SimHei, serif}
 
 a:link {text-decoration:none;}
@@ -29,6 +29,6 @@ a:active {text-decoration:none;}
 /*===============go top===============*/
 
 @media (min-width: 768px) {
-	#laputa_content{margin-left:30px;}
+	#laputa_content{margin-left:30px;margin-right: 30px;}
 	#article_list, #article_content{border-right:1px solid #CCC; }
 }

@@ -13,7 +13,7 @@ PROJECT_ROOT = parent_dir(APP_DIR)
 FREEZER_DESTINATION = PROJECT_ROOT
 FREEZER_BASE_URL = "http://www.gjyaiya.xyz/"
 # FREEZER_REMOVE_EXTRA_FILES = False
-FREEZER_DESTINATION_IGNORE = ['.git*', '.idea/*', 'app/*', '*.py', 'READ*']
+FREEZER_DESTINATION_IGNORE = ['.git*', '.idea/*', 'app/*', '*.py', 'READ*', 'CNAME']
 
 FLATPAGES_MARKDOWN_EXTENSIONS = ['codehilite']
 FLATPAGES_ROOT = os.path.join(APP_DIR, 'pages')
