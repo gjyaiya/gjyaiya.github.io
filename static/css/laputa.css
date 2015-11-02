@@ -1,14 +1,14 @@
 html,body {overflow-x: hidden; /* Prevent scroll on narrow devices */}
 html {position: relative;min-height: 100%;font-family: consolas, Microsoft YaHei, SimHei, serif}
 body {background-color: #efeee4;padding-top: 70px;margin-bottom: 80px;}
-blockquote {font-size: 14px;border-left:3px solid #15a230;}
-footer {position: absolute;bottom: 0;height: 80px;}
-#navbar,h1,h2,h3{font-family: Microsoft YaHei, SimHei, serif}
 
 a:link {text-decoration:none;}
 a:visited {text-decoration:none;}
 a:hover {text-decoration:none; color:#FF00FF;}
 a:active {text-decoration:none;}
+
+h1,h2,h3,#navbar{font-family: Microsoft YaHei, SimHei, serif}
+footer {position: absolute;bottom: 0;height: 80px;}
 
 #laputa_content {background-color:#FFF;padding-right:20px;padding-top:10px; }
 
@@ -16,6 +16,7 @@ a:active {text-decoration:none;}
 #article_list .thumbnail{border:1px solid rgba(255, 255, 255, 0);}
 #article_content {background-color:#FFF;padding: 10px 20px 30px 30px;}
 #article_content #info{  font-family: Microsoft YaHei, SimHei, serif; color:#0786C2;margin-bottom: 10px;}
+
 #sidebar {background-color:#FFF;padding-left:30px;padding-bottom:30px;}
 #sidebar_category_content{padding:0 5px;}
 #sidebar_category_content hr{margin:5px 20px 5px 0;border-bottom: 1px dotted #ccc;border-top:none; width: 100%; height:1px;}
@@ -27,6 +28,14 @@ a:active {text-decoration:none;}
 #gotop span:hover{ color:#cccccc;}
 #gotop span{ font-size:40px; text-align:center; margin-top:4px;}
 /*===============go top===============*/
+
+/*===============Markdown===============*/
+.markdown-body blockquote {font-size: 14px;border-left:3px solid #15a230;padding: 5px 10px;margin-left: 10px;}
+.markdown-body h1{font-size: 28px;color: #000000;}
+.markdown-body h2{font-size: 23px;color: #337ab7;}
+.markdown-body h3{font-size: 18px;color: #2292DD;}
+.markdown-body h4{font-size: 13px;color: #11C2EE;}
+/*===============Markdown===============*/
 
 @media (min-width: 768px) {
 	#laputa_content{margin-left:30px;margin-right: 30px;}

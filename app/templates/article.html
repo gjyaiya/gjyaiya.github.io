@@ -8,7 +8,7 @@
 		{{ article.date}}&nbsp;&middot;&nbsp;
 		{{ article.category }}
 	</div>
-	<div id="content">{{ article.html|safe  }}</div>
+	<div class="markdown-body">{{ article.html|safe  }}</div>
     <hr style="margin-top: 10px;margin-bottom: 10px;">
 	<div id="tags" class='text-right' style="margin-bottom:10px;">
 	{% for tag in article.tags %}
