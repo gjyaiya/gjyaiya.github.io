@@ -15,6 +15,6 @@ FREEZER_BASE_URL = "http://www.gjyaiya.xyz/"
 # FREEZER_REMOVE_EXTRA_FILES = False
 FREEZER_DESTINATION_IGNORE = ['.git*', '.idea/*', 'app/*', '*.py', 'READ*', 'CNAME']
 
-FLATPAGES_MARKDOWN_EXTENSIONS = ['codehilite']
+FLATPAGES_MARKDOWN_EXTENSIONS = ['codehilite', 'tables', 'footnotes']
 FLATPAGES_ROOT = os.path.join(APP_DIR, 'pages')
 FLATPAGES_EXTENSION = '.md'

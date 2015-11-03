@@ -1,86 +1,45 @@
-/* Pretty printing styles. Used with prettify.js.
- *
- * Name:	Stanley Ng
- * Email: 	stanleyhlng@googlegroups.com
- * 
- * Credits:
- * https://github.com/chriskempson/tomorrow-theme
- */
-.pln {
-  color: #4d4d4c; }
+.pln { color: #000 }  /* plain text */
 
-.str {
-  color: #718c00; }
+@media screen {
+  .str { color: #080 }  /* string content */
+  .kwd { color: #008 }  /* a keyword */
+  .com { color: #800 }  /* a comment */
+  .typ { color: #606 }  /* a type name */
+  .lit { color: #066 }  /* a literal value */
+  /* punctuation, lisp open bracket, lisp close bracket */
+  .pun, .opn, .clo { color: #660 }
+  .tag { color: #008 }  /* a markup tag name */
+  .atn { color: #606 }  /* a markup attribute name */
+  .atv { color: #080 }  /* a markup attribute value */
+  .dec, .var { color: #606 }  /* a declaration; a variable name */
+  .fun { color: red }  /* a function name */
+}
 
-.kwd {
-  color: #8959a8; }
-
-.com {
-  color: #8e908c;
-  font-style: italic; }
-
-.typ {
-  color: #f5871f; }
-
-.lit {
-  color: #eab700; }
-
-.pun {
-  color: #4d4d4c; }
-
-.opn {
-  color: #4d4d4c; }
-
-.clo {
-  color: #4d4d4c; }
-
-.tag {
-  color: #c82829; }
-
-.atn {
-  color: #eab700; }
-
-.atv {
-  color: #3e999f; }
-
-.dec {
-  color: #f5871f; }
-
-.var {
-  color: #c82829; }
-
-.fun {
-  color: #c82829; }
+@media print, projection {
+  .str { color: #060 }
+  .kwd { color: #006; font-weight: bold }
+  .com { color: #600; font-style: italic }
+  .typ { color: #404; font-weight: bold }
+  .lit { color: #044 }
+  .pun, .opn, .clo { color: #440 }
+  .tag { color: #006; font-weight: bold }
+  .atn { color: #404 }
+  .atv { color: #060 }
+}
 
 /* Put a border around prettyprinted code snippets. */
 pre.prettyprint {
-  background-color: #ffffff;
-  padding: 10px;
-  border: 1px solid #E1E1E8; }
+  background: none repeat scroll 0 0 rgba(102,128,153,.05);
+  padding: 5px;
+  border: 1px solid #E1E1E8;
+  margin-right: 10px;
+  box-shadow: 0 1px 2px rgba(255, 255, 255, 0.1) inset, 45px 0 0 rgba(102, 128, 153, 0.05) inset, 0 1px 0 rgba(102, 128, 153, 0.05);}
 
 /* Specify class=linenums on a pre to get line numbering */
 ol.linenums {
-  color: #8e908c;
-  margin: 0 0 0 7px;  }
+  color: rgba(102, 128, 153, 0.4);
+  margin: 0 0 0 2px;}
 
 ol.linenums li {
   line-height: 18px;
-  padding-left: 12px; }
-
-li.L0,
-li.L1,
-li.L2,
-li.L3,
-li.L5,
-li.L6,
-li.L7,
-li.L8 {
-  list-style-type: normal; }
-
-/* Alternate shading for lines */
-li.L1,
-li.L3,
-li.L5,
-li.L7,
-li.L9 {
-  background: #eee; }
+  padding-left: 5px;}

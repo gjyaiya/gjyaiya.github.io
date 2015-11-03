@@ -1,0 +1,9 @@
+flask
+jinja2
+markupsafe
+werkzeug
+itsdangerous
+
+Frozen-Flask
+Flask-FlatPages
+markdown

@@ -1,5 +1,5 @@
 html,body {overflow-x: hidden; /* Prevent scroll on narrow devices */}
-html {position: relative;min-height: 100%;font-family: consolas, Microsoft YaHei, SimHei, serif}
+html {position: relative;min-height: 100%;}
 body {background-color: #efeee4;padding-top: 70px;margin-bottom: 80px;}
 
 a:link {text-decoration:none;}
@@ -10,12 +10,12 @@ a:active {text-decoration:none;}
 h1,h2,h3,#navbar{font-family: Microsoft YaHei, SimHei, serif}
 footer {position: absolute;bottom: 0;height: 80px;}
 
-#laputa_content {background-color:#FFF;padding-right:20px;padding-top:10px; }
+#laputa_content {background-color:#FFF;padding-right:20px;padding-top:10px;}
 
 #article_list {background-color:#FFF;padding-right:20px;padding-top:10px; }
 #article_list .thumbnail{border:1px solid rgba(255, 255, 255, 0);}
 #article_content {background-color:#FFF;padding: 10px 20px 30px 30px;}
-#article_content #info{  font-family: Microsoft YaHei, SimHei, serif; color:#0786C2;margin-bottom: 10px;}
+#article_content #info{font-family: Microsoft YaHei, SimHei, serif; color:#0786C2;margin-bottom: 10px;}
 
 #sidebar {background-color:#FFF;padding-left:30px;padding-bottom:30px;}
 #sidebar_category_content{padding:0 5px;}
@@ -30,11 +30,14 @@ footer {position: absolute;bottom: 0;height: 80px;}
 /*===============go top===============*/
 
 /*===============Markdown===============*/
-.markdown-body blockquote {font-size: 14px;border-left:3px solid #15a230;padding: 5px 10px;margin-left: 10px;}
-.markdown-body h1{font-size: 28px;color: #000000;}
-.markdown-body h2{font-size: 23px;color: #337ab7;}
-.markdown-body h3{font-size: 18px;color: #2292DD;}
-.markdown-body h4{font-size: 13px;color: #11C2EE;}
+.markdown-body {font-family:Microsoft Yahei,Hiragino Sans GB,WenQuanYi Micro Hei,sans-serif;}
+.markdown-body p {font-size: 16px;line-height: 27px;}
+.markdown-body blockquote {font-size: 14px;border-left:5px solid #D6DBDF;padding: 5px 10px;background: none repeat scroll 0 0 rgba(102,128,153,.05);}
+.markdown-body blockquote {font-size: 16px;font-weight: 300;line-height: 25px;}
+.markdown-body h1{font-size: 28px;color: #446280;}
+.markdown-body h2{font-size: 23px;color: #446280;margin: 35px 0 20px;}
+.markdown-body h3{font-size: 18px;color: #337ab7;margin: 20px 0;}
+.markdown-body h4{font-size: 16px;color: #337ab7;}
 /*===============Markdown===============*/
 
 @media (min-width: 768px) {
