@@ -33,3 +33,8 @@ def show_article(article):
     article = pages.get(article)
     article.html = article.html.replace('<pre>', "<pre class='prettyprint linenums no-phone'>")
     return render_template('article.html', article=article)
+
+
+@app.route('/c')
+def christmas():
+    return render_template('christmas.html')
