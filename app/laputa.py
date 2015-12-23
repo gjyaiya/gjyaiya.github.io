@@ -35,6 +35,6 @@ def show_article(article):
     return render_template('article.html', article=article)
 
 
-@app.route('/c')
+@app.route('/c/')
 def christmas():
     return render_template('christmas.html')
