@@ -51,26 +51,34 @@
 	<div class="markdown-body"><p>套接字模块是一个非常简单的基于对象的接口，它提供对低层BSD套接字样式网络的访问。使用该模块可以实现客户机和服务器套接字。要在python 中建立具有TCP和流套接字的简单服务器，需要使用socket模块。利用该模块包含的函数和类定义，可生成通过网络通信的程序。</p>
 <h2>建立服务器连接需要六个步骤</h2>
 <h3>1. 创建socket对象。调用socket构造函数</h3>
-<pre class='prettyprint linenums no-phone'><code>socket=socket.socket(familly,type)
-</code></pre>
+<div class="codehilite"><pre class='prettyprint linenums no-phone'><span></span>socket=socket.socket(familly,type)
+</pre></div>
+
+
 <blockquote>
 <p>family的值可以是AF_UNIX(Unix域，用于同一台机器上的进程间通讯)，也可以是AF_INET（对于IPV4协议的TCP和UDP），至于type参数，SOCK_STREAM（流套接字）或者SOCK_DGRAM（数据报文套接字）,SOCK_RAW（raw套接字）。</p>
 </blockquote>
 <h3>2. socket绑定（指派）到指定地址上</h3>
-<pre class='prettyprint linenums no-phone'><code>socket.bind(address)
-</code></pre>
+<div class="codehilite"><pre class='prettyprint linenums no-phone'><span></span>socket.bind(address)
+</pre></div>
+
+
 <blockquote>
 <p>address必须是一个双元素元组,((host,port)),主机名或者ip地址+端口号。如果端口号正在被使用或者保留，或者主机名或ip地址错误，则引发socke.error异常。</p>
 </blockquote>
 <h3>3. 接受连接请求</h3>
-<pre class='prettyprint linenums no-phone'><code>socket.listen(backlog)
-</code></pre>
+<div class="codehilite"><pre class='prettyprint linenums no-phone'><span></span>socket.listen(backlog)
+</pre></div>
+
+
 <blockquote>
 <p>backlog指定了最多连接数，至少为1，接到连接请求后，这些请求必须排队，如果队列已满，则拒绝请求。</p>
 </blockquote>
 <h3>4. 等待客户请求一个连接</h3>
-<pre class='prettyprint linenums no-phone'><code>connection,address=socket.accept()
-</code></pre>
+<div class="codehilite"><pre class='prettyprint linenums no-phone'><span></span>connection,address=socket.accept()
+</pre></div>
+
+
 <blockquote>
 <p>调用accept方法时，socket会进入\'waiting\'（或阻塞）状态。客户请求连接时，方法建立连接并返回服务器。accept方法返回一个含有俩个元素的元组，形如(connection,address)。第一个元素（connection）是新的socket对象，服务器通过它与客户通信；第二个元素（address）是客户的internet地址。</p>
 </blockquote>
@@ -81,44 +89,50 @@
 <h3>6. 服务器调用socket的close方法以关闭连接</h3>
 <h2>建立一个简单客户连接则需要4个步骤</h2>
 <h3>1. 创建一个socket以连接服务器</h3>
-<pre class='prettyprint linenums no-phone'><code>socket=socket.socket(family,type)
-</code></pre>
+<div class="codehilite"><pre class='prettyprint linenums no-phone'><span></span>socket=socket.socket(family,type)
+</pre></div>
+
+
 <h3>2. 使用socket的connect方法连接服务器</h3>
-<pre class='prettyprint linenums no-phone'><code>socket.connect((host,port))
-</code></pre>
+<div class="codehilite"><pre class='prettyprint linenums no-phone'><span></span>socket.connect((host,port))
+</pre></div>
+
+
 <h3>3. 客户端和服务器通过send和recv方法通信。</h3>
 <h3>4. 客户端通过调用socket的close方法来关闭连接。</h3>
 <h2>python 编写server的步骤：</h2>
 <p><em>server.py</em></p>
-<pre class='prettyprint linenums no-phone'><code>if __name__ == '__main__':
-    import socket
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.bind(('localhost', 8001))
-    sock.listen(5)
-    while True:
-        connection,address = sock.accept()
-        try:
-            connection.settimeout(5)
-            buf = connection.recv(1024)
-            if buf == '1':
-                connection.send(\'welcome to server!\')
-            else:
-                connection.send(\'please go out!\')
-        except socket.timeout:
-            print 'time out'
-    connection.close()
-</code></pre>
+<div class="codehilite"><pre class='prettyprint linenums no-phone'><span></span><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">socket</span>
+    <span class="n">sock</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
+    <span class="n">sock</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="mi">8001</span><span class="p">))</span>
+    <span class="n">sock</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="n">connection</span><span class="p">,</span><span class="n">address</span> <span class="o">=</span> <span class="n">sock</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">connection</span><span class="o">.</span><span class="n">settimeout</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+            <span class="n">buf</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">buf</span> <span class="o">==</span> <span class="s1">&#39;1&#39;</span><span class="p">:</span>
+                <span class="n">connection</span><span class="o">.</span><span class="n">send</span><span class="p">(</span>\<span class="s1">&#39;welcome to server!</span><span class="se">\&#39;</span><span class="s1">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">connection</span><span class="o">.</span><span class="n">send</span><span class="p">(</span>\<span class="s1">&#39;please go out!</span><span class="se">\&#39;</span><span class="s1">)</span>
+        <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">timeout</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s1">&#39;time out&#39;</span>
+    <span class="n">connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+
+
 <p><em>client.py</em></p>
-<pre class='prettyprint linenums no-phone'><code>if __name__ == '__main__':
-    import socket
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.connect(('localhost', 8001))
-    import time
-    time.sleep(2)
-    sock.send('1')
-    print sock.recv(1024)
-    sock.close()
-</code></pre></div>
+<div class="codehilite"><pre class='prettyprint linenums no-phone'><span></span><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">socket</span>
+    <span class="n">sock</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
+    <span class="n">sock</span><span class="o">.</span><span class="n">connect</span><span class="p">((</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="mi">8001</span><span class="p">))</span>
+    <span class="kn">import</span> <span class="nn">time</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">sock</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">)</span>
+    <span class="k">print</span> <span class="n">sock</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span>
+    <span class="n">sock</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div></div>
     <hr style="margin-top: 10px;margin-bottom: 10px;">
 	<div id="tags" class='text-right' style="margin-bottom:10px;">
 	
