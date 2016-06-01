@@ -1,0 +1,66 @@
+html,body {overflow-x: hidden; /* Prevent scroll on narrow devices */}
+html {position: relative; min-height: 100%;}
+body {background-color: #F5F7F9; margin-bottom: 80px;}
+footer {position: absolute;bottom: 0; height: 80px; padding-top: 20px;}
+
+a:link {text-decoration:none; color:#428bca;}
+a:visited {text-decoration:none; color:#428bca;}
+a:hover {text-decoration:none; color:#FF00FF;}
+a:active {text-decoration:none; color:#428bca;}
+
+#sidebar a:link {color:#817c7c;}
+#sidebar a:visited {color:#817c7c;}
+#sidebar a:hover {color:#428bca;}
+#sidebar a:active {color:#817c7c;}
+
+h1{font-size: 22px;color: #333;}
+h2{font-size: 20px;color: #333;}
+h3{font-size: 18px;color: #333;}
+h4{font-size: 16px;color: #333;}
+h5{font-size: 15px;color: #333;}
+p{font-size: 14px;}
+
+.font_dft {font-family:'Consolas', 'Microsoft YaHei', SimHei, serif}
+.hr_m10{margin: 10px;}
+.hr_m105{margin-top: 10px; margin-bottom: 5px;}
+.c_5e{color:#5e5e5e;}
+.c_blue{color:#0786C2}
+.mb_10{margin-bottom: 10px;}
+.ml_10{margin-left: 10px;}
+.p_20{padding: 20px;}
+.pl_20{padding-left: 20px;}
+.pr_20{padding-right: 20px;}
+
+#main_content {background-color:rgba(255,255,255,0.8); padding:10px 10px 20px 10px; margin-top: 10px}
+#article_index {padding:0 30px;}
+#article_index p{padding:0 10px;}
+#sidebar{padding-top: 10px; margin-top: 10px;}
+#sidebar ul{padding: 0;}
+#sidebar ul li {list-style-type:none; margin-left: 10px; margin-bottom: 3px;}
+.sidebar_item{}
+.tags{margin:1px 2px;display: inline-block;padding:5px; color: #FFF !important;}
+p code{background-color: #eee; padding: 3px; margin:0 3px;}
+
+/*===============go top===============*/
+#gotop{width:40px; height:40px; position:fixed; bottom:50px; right:40px; text-decoration:none; display:none; background-color:#999999;}
+#gotop span{ display:block; width:40px; color:#FFFFFF;}
+#gotop span:hover{ color:#DDDDDD;}
+#gotop span{ font-size:30px; text-align:center;}
+/*===============go top===============*/
+
+/*===============Markdown===============*/
+.markdown-body {padding: 20px;}
+.markdown-body p {margin-left:10px;font-size: 14px;line-height: 23px;}
+.markdown-body blockquote {margin:5px 0 10px 10px; border-left:5px solid #D6DBDF;padding: 5px 10px 5px 0;background: none repeat scroll 0 0 rgba(102,128,153,.05);}
+.markdown-body .codehilite {margin:5px 0 10px 10px;}
+.markdown-body h3{margin:0;padding-top: 15px; padding-bottom: 10px; color: #337ab7;}
+.markdown-body h4{margin:0;padding-top:10px; padding-bottom: 5px; color: #6699cc}
+/*===============Markdown===============*/
+
+/*===============DuoShuo===============*/
+#ds-reset .ds-powered-by { display: none; }
+/*===============DuoShuo===============*/
+
+@media (min-width: 768px) {
+	#content{border-right:1px solid #CCC; }
+}

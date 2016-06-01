@@ -7,7 +7,9 @@
     <meta name="author" content="Vimous" />
     <link rel="shortcut icon" href="/static/favicon.png">
 
-    <title>Laputa</title>
+    <title>
+    Cygwin 配置 | Laputa
+</title>
 
     <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
@@ -19,20 +21,36 @@
         <div id="main_content" class="row" >
             <div id = "content" class="col-sm-9 col-xs-12">
                 
-    
-    <div id="article_index" class="row font_dft">
-        <h2><a href="/article/python-socket/">Python Socket</a></h2>
-        <p>套接字模块是一个非常简单的基于对象的接口，它提供对低层BSD套接字样式网络的访问。使用该模块可以实现客户机和服务器套接字。要在python 中建立具有TCP和流套接字的简单服务器，需要使用socket模块。利用该模块包含的函数和类定义，可生成通过网络通信的程序。</p>
-    </div>
+    <h2 class="pl_20 font_dft"><a href="/article/cygwin-config/">Cygwin 配置</a></h2>
     <hr class="hr_m10">
-    
-    <div id="article_index" class="row font_dft">
-        <h2><a href="/article/cygwin-config/">Cygwin 配置</a></h2>
-        <p>Windows下模拟Linux的Shell 以及配置</p>
+    <div class="text-right c_blue font_dft pr_20">
+        Vimous&nbsp;&middot;&nbsp;2015-12-22&nbsp;&middot;&nbsp;Linux
     </div>
-    <hr class="hr_m10">
+    <div class="markdown-body font_dft"><h3>1.Cygwin</h3>
+<h3>2.bubun</h3>
+<h3>3.配置</h3>
+<h3>3.1 UTF-8乱码</h3>
+<p>拿ping举例: 通过iconv命令，添加命令pings，内容如下:</p>
+<pre class='prettyprint linenums'><code>vim /usr/bin/pings 
+ 
+#!/bin/bash 
+ping $1 | iconv -f gbk -t utf-8 
+</code></pre>
+
+<p>保存退出<code>chmod 777 /usr/bin/pings</code>变成可执行.</p></div>
+    <div id="tags" class='text-right'>
     
-    <nav class="text-center" id="article_pager"></nav>
+        <a href="/tag/Linux/" class="label label-info tags">Linux</a>&nbsp;
+    
+        <a href="/tag/demo/" class="label label-info tags">demo</a>&nbsp;
+    
+    </div>
+
+    <!-- 多说评论框 start -->
+    <div class="ds-thread p_20" data-thread-key="cygwin-config"
+         data-title="Cygwin 配置" data-url="/article/cygwin-config/">
+    </div>
+    <!-- 多说评论框 end -->
 
             </div>
             <div id="sidebar" class="col-sm-3 col-xs-12" >
@@ -44,31 +62,9 @@
                         </ul>
                     </div>
                     
-    <div class="hidden-xs col-xs-12 sidebar_item ml_10 font_dft" >
-        <h4>最近更新</h4>
-        <ul>
-            
-                <li><a href="/article/python-socket/">Python Socket</a></li>
-            
-                <li><a href="/article/cygwin-config/">Cygwin 配置</a></li>
-            
-                <li><a href="/article/intel-cpu-suffix/">Intel CPU 后缀</a></li>
-            
-        </ul>
-    </div>
-    <div class="hidden-xs col-xs-12 sidebar_item ml_10" >
-        <h4 class="font_dft">标签</h4>
-        <div class="ml_10">
-            
-                <a href="/tag/Python/" class="label tags label-info }}">Python</a>
-            
-                <a href="/tag/demo/" class="label tags label-warning }}">demo</a>
-            
-                <a href="/tag/Interest/" class="label tags label-success }}">Interest</a>
-            
-                <a href="/tag/Linux/" class="label tags label-warning }}">Linux</a>
-            
-        </div>
+    <div id="sidebar_toc" class="hidden-xs col-xs-12 sidebar_item ml10 font_dft" >
+        <h4>目录</h4>
+        <div id="toc_content"></div>
     </div>
 
                 </div>
@@ -94,10 +90,25 @@ $(function(){
 });
 </script>
 
+<script src="/static/js/prettify.js"></script>
 <script>
 $(function(){
-    load_pager({"count": 2, "pre": "/tag/demo/", "page": 1, "pagesize": 10});
-});
+    prettyPrint();
+    toc_scroll();
+    show_toc('.markdown-body h3, .markdown-body h4', 'toc_content', 1)
+    toc_click_scroll();
+})
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+var duoshuoQuery = {short_name:"gjyaiya"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+<!-- 多说公共JS代码 end -->
 </script>
 
 </html>
