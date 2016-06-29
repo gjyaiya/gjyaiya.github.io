@@ -86,7 +86,7 @@ function show_toc(toc_selector, wrap_id, min_nr) {
     link = document.createElement('a');
     link.href = 'javascript:history.go(-1);';
     link.className = 'toc_link';
-    link.innerHTML = "-返回上一页";
+    link.innerHTML = "&middot;&nbsp;返回上一页";
     li.appendChild(link);
     ul.appendChild(li);
 

@@ -27,22 +27,68 @@
         Vimous&nbsp;&middot;&nbsp;2015-12-22&nbsp;&middot;&nbsp;Linux
     </div>
     <div class="markdown-body font_dft"><h3>1.Cygwin</h3>
-<h3>2.bubun</h3>
+<p><a href="https://www.cygwin.com/" title="Cygwin">Cygwin</a> 是一个运行在Win下的Linux模拟环境, 可以使用大部分linux shell命令， 基本可以代替Dos命令。
+当然Cygwin还有很多不完善的地方:
+1. 安装配置十分复杂
+2. 中文字符支持的不好
+3. bash命令行比较弱...</p>
+<p>针对这些问题, 加上网上搜索的资料, 做如下配置, 基本上在Win下能用到一个比较好的Shell了.</p>
+<h3>2.Bubun</h3>
+<p>Bubun在Cygwin上加了一层壳, 做了一些常用的配置, 自带<strong>GIT</strong>!!! 自带<strong>oh-my-zsh</strong>!!!
+参考<a href="https://babun.github.io/" title="Bubun的主页">Bubun的主页</a>, 一键式配置就可以完成.</p>
 <h3>3.配置</h3>
+<p>以下是自己摸索的cygwin和zsh在win下的配置, 基本上解决了上述的Cygwin的问题.</p>
 <h3>3.1 UTF-8乱码</h3>
-<p>拿ping举例: 通过iconv命令，添加命令pings，内容如下:</p>
-<pre class='prettyprint linenums'><code>vim /usr/bin/pings 
- 
-#!/bin/bash 
-ping $1 | iconv -f gbk -t utf-8 
+<p>Win下默认的是GBK编码, 输出UTF8的时候会出现乱码, 基本解决思路是通过iconv转换一下.</p>
+<p>拿ping举例:
+通过iconv命令，输出转码后的内容:
+<img alt="" src="http://7xnv8n.com1.z0.glb.clouddn.com/laputa/cygwin/1.png" /></p>
+<p><img alt="" src="http://7xnv8n.com1.z0.glb.clouddn.com/laputa/cygwin/2.png" /></p>
+<p>既然这样, 我们可以添加快捷键, 快速使用iconv命令.
+在<code>.zshrc</code>中添加:</p>
+<pre class='prettyprint linenums'><code class="shell">gbk-utf-8() {
+[[ -z $BUFFER ]] &amp;&amp; zle up-history
+[[ $BUFFER != *utf-8 ]] &amp;&amp; BUFFER=&quot;$BUFFER| iconv -f gbk -t utf-8&quot;
+zle end-of-line
+}
+zle -N gbk-utf-8
+#定义快捷键为： ctrl+u
+bindkey &quot;^[u&quot; gbk-utf-8
 </code></pre>
 
-<p>保存退出<code>chmod 777 /usr/bin/pings</code>变成可执行.</p></div>
+<blockquote>
+<p>在使用 bindkey 命令时，参数使用对应快捷键的 CSI 序列，如果想知道某种快捷组合键的 CSI 序列，可以有如下两种方法:
+1. 先按 Ctrl-V 然后再按组合键，如 Ctrl-A
+2. 输入 cat &gt; /dev/null ，之后输入组合键</p>
+</blockquote>
+<p>当然也可以添加新的命令(pings)，内容如下:</p>
+<pre class='prettyprint linenums'><code class="shell">vim /usr/bin/pings
+
+#!/bin/bash
+ping $1 | iconv -f gbk -t utf-8
+</code></pre>
+
+<p>保存退出<code>chmod 777 /usr/bin/pings</code></p>
+<h3>3.2 命令高亮</h3>
+<p>推荐Zsh下的<a href="https://github.com/zsh-users/zsh-syntax-highlighting" title="zsh-syntax-highlighting">zsh-syntax-highlighting</a>插件</p>
+<pre class='prettyprint linenums'><code class="shell">mkdir /usr/local/share/zsh-syntax-highlighting/
+mv zsh-syntax-highlighting.zsh /usr/local/share/zsh-syntax-highlighting/
+source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+</code></pre>
+
+<h3>3.3 json格式化</h3>
+<p>需要<code>python</code>和 <code>pip install  pygments</code></p>
+<pre class='prettyprint linenums'><code class="shell">pretty-json() {
+[[ -z $BUFFER ]] &amp;&amp; zle up-history
+[[ $BUFFER != *pygmentize* ]] &amp;&amp; BUFFER=&quot;$BUFFER|python -mjson.tool |pygmentize -l javascript&quot;
+zle end-of-line #光标移动到行末
+}
+zle -N pretty-json
+bindkey &quot;^[j&quot; pretty-json
+</code></pre></div>
     <div id="tags" class='text-right'>
     
         <a href="/tag/Linux/" class="label label-info tags">Linux</a>&nbsp;
-    
-        <a href="/tag/demo/" class="label label-info tags">demo</a>&nbsp;
     
     </div>
 
