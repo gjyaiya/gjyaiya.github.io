@@ -21,6 +21,18 @@
                 
     
     <div id="article_index" class="row font_dft">
+        <h2><a href="/article/maorecycler/">MaoRecyclerView</a></h2>
+        <p>封装RecyclerView 实现 上拉刷新 下拉加载, 增加Header Footer, 增加EmptyView</p>
+    </div>
+    <hr class="hr_m10">
+    
+    <div id="article_index" class="row font_dft">
+        <h2><a href="/article/rxbus/">一个RxBus实现</a></h2>
+        <p>Rxjava是一个响应式编程框架, 目的是通过观察者模式, 异步通知事件. Rxjava可以很方便的写出一个类似EventBus的事件总线来</p>
+    </div>
+    <hr class="hr_m10">
+    
+    <div id="article_index" class="row font_dft">
         <h2><a href="/article/cygwin-config/">Cygwin 配置</a></h2>
         <p>Windows下模拟Linux的Shell 以及配置</p>
     </div>
@@ -29,6 +41,12 @@
     <div id="article_index" class="row font_dft">
         <h2><a href="/article/intel-cpu-suffix/">Intel CPU 后缀</a></h2>
         <p>Intel CPU的后缀字母含义</p>
+    </div>
+    <hr class="hr_m10">
+    
+    <div id="article_index" class="row font_dft">
+        <h2><a href="/article/a1/">经典的车和羊的问题</a></h2>
+        <p>节目现场有三扇门，其中一扇门后有辆车，其它两扇门后各是一只山羊。从正面看不出区别。主持人会叫一个观众上来，让其选其中的一扇门。当他选定后，这时，知晓每扇门后是什么东西的主持人会打开剩下两扇门中的有山羊的一扇门。这时现场有两扇门没打开：观众选定的，和剩下的另一扇。主持人此时会让这观众在没打开的两扇门中再做一次选择。是坚持选原来的那扇门，还是改选剩下的没被打开的那扇门？</p>
     </div>
     <hr class="hr_m10">
     
@@ -47,6 +65,7 @@
                         <ul>
                             <li><a href="/">首页</a></li>
                             <li><a href="/">关于我</a></li>
+                            <li><a href="/static/bitcoin/bitcoin.htm">Bitcoin简介</a></li>
                         </ul>
                     </div>
                     
@@ -54,9 +73,15 @@
         <h4>最近更新</h4>
         <ul>
             
+                <li><a href="/article/maorecycler/">MaoRecyclerView</a></li>
+            
+                <li><a href="/article/rxbus/">一个RxBus实现</a></li>
+            
                 <li><a href="/article/cygwin-config/">Cygwin 配置</a></li>
             
                 <li><a href="/article/intel-cpu-suffix/">Intel CPU 后缀</a></li>
+            
+                <li><a href="/article/a1/">经典的车和羊的问题</a></li>
             
                 <li><a href="/article/python-socket/">Python Socket</a></li>
             
@@ -66,9 +91,13 @@
         <h4 class="font_dft">标签</h4>
         <div class="ml_10">
             
-                <a href="/tag/Python/" class="label tags label-info }}">Python</a>
+                <a href="/tag/Python/" class="label tags label-success }}">Python</a>
             
-                <a href="/tag/Interest/" class="label tags label-success }}">Interest</a>
+                <a href="/tag/Android/" class="label tags label-success }}">Android</a>
+            
+                <a href="/tag/Algorithm/" class="label tags label-info }}">Algorithm</a>
+            
+                <a href="/tag/Interest/" class="label tags label-info }}">Interest</a>
             
                 <a href="/tag/Linux/" class="label tags label-warning }}">Linux</a>
             
@@ -100,7 +129,7 @@ $(function(){
 
 <script>
 $(function(){
-    load_pager({"count": 3, "pre": "/", "page": 1, "pagesize": 10});
+    load_pager({"count": 6, "pre": "/", "page": 1, "pagesize": 10});
 });
 </script>
 

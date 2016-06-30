@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Vimous" />
+    <link rel="shortcut icon" href="/static/favicon.png">
+
+    <title>
+    MaoRecyclerView | Laputa
+</title>
+
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <link href="/static/css/l.css" rel="stylesheet">
+    <link href="/static/css/prettify.css" rel="stylesheet">
+</head>
+<body>
+	<div class="container">
+        <div id="main_content" class="row" >
+            <div id = "content" class="col-sm-9 col-xs-12">
+                
+    <h2 class="pl_20 font_dft"><a href="/article/maorecycler/">MaoRecyclerView</a></h2>
+    <hr class="hr_m10">
+    <div class="text-right c_blue font_dft pr_20">
+        Vimous&nbsp;&middot;&nbsp;2016-06-21&nbsp;&middot;&nbsp;Android
+    </div>
+    <div class="markdown-body font_dft"><p>Android RecyclerView已经出来很久了, 官方推荐来替换原有的ListView.</p>
+<p>现在项目中的ListView使用的是第三方框架PullToRefresh来实现View的下拉刷新和加载更多.
+虽然MaterialDesign有自己的一套刷新设计, 但是产品还是要求UI使用仿照IOS的下拉刷新T^T.
+So, 想用RecyclerView, 就只好自己实现下拉刷新和上拉加载了.</p>
+<h3>下拉刷新</h3>
+<h5>1. 下拉刷新View的几种状态:</h5>
+<ul>
+<li><strong>IDLE</strong>(空闲)</li>
+<li><strong>PULL</strong>(下拉)</li>
+<li><strong>PULL_TO_REFRESH</strong>(可刷新)</li>
+<li><strong>REFRESHING</strong>(刷新中)</li>
+<li><strong>COMPLETED</strong>(刷新完成)</li>
+</ul>
+<h5>2. View在拉取的时候弹性处理</h5>
+<p>采用的方法是 根据RecyclerView传过来的滑动坐标差值来针对View高度做属性动画.
+抽象关键代码如下:</p>
+<pre class='prettyprint linenums'><code class="java">public abstract class MaoRefreshView extends LinearLayout {
+    private static final int COMPLETE_TIME = 1000; //完成等待时间
+
+    private int mHeight;
+
+    private enum State {IDLE, PULL, PULL_TO_REFRESH, REFRESHING, COMPLETED}
+    private State mState = State.IDLE; //初始化状态
+
+    public MaoRefreshView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+
+        //在要实现的View外层包装一层View 下拉时可向下拉动
+        LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        lp.setMargins(0, 0, 0, 0);
+        this.setLayoutParams(lp);
+        this.setPadding(0, 0, 0, 0);
+
+        addView(onCreateView(),
+            new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        setGravity(Gravity.BOTTOM);
+
+        measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        mHeight = getMeasuredHeight();
+        setVisibleHeight(0);
+    }
+
+    private void setState(State state){ //状态管理
+        if(state == mState) return;
+        mState = state;
+        switch (state){
+            case IDLE: smoothScrollTo(0); break;
+            case PULL: onPull(); break;
+            case PULL_TO_REFRESH: onPullToRefresh(); break;
+            case REFRESHING: onRefresh(); break;
+            case COMPLETED: onCompleted(); finishComplete(); break;
+        }
+    }
+
+    private void setVisibleHeight(int height) {
+        if (height &lt; 0) height = 0;
+        ViewGroup.LayoutParams lp = getLayoutParams();
+        lp.height = height;
+        setLayoutParams(lp);
+    }
+
+    private int getVisibleHeight() {
+        return getLayoutParams().height;
+    }
+
+    private void smoothScrollTo(int destHeight) {
+        ValueAnimator animator = ValueAnimator.ofInt(getVisibleHeight(), destHeight);
+        animator.setDuration(300).start();
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation)
+            {
+                setVisibleHeight((int) animation.getAnimatedValue());
+            }
+        });
+        animator.start();
+    }
+
+    protected abstract View onCreateView();
+
+    protected abstract void onPull();
+
+    protected abstract void onPullToRefresh();
+
+    protected abstract void onRefresh();
+
+    protected abstract void onCompleted();
+
+    private void finishComplete(){
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                setState(State.IDLE);
+            }
+        }, COMPLETE_TIME);
+    }
+
+    /**
+     * 下拉
+     * @param offsetY //下拉Y轴偏移
+     * @return true//如果正常消费了下拉事件
+     * */
+    public boolean pull(float offsetY){
+        if(offsetY &gt; 0){
+            if(!((mState == State.REFRESHING || mState == State.COMPLETED) &amp;&amp; offsetY &lt; mHeight))
+                setVisibleHeight((int) offsetY);
+            if(mState == State.IDLE) {
+                setState(State.PULL);
+                return true;
+            }
+            if(mState == State.PULL &amp;&amp; getVisibleHeight() &gt;= mHeight){
+                setState(State.PULL_TO_REFRESH);
+                return true;
+            }
+            if(mState == State.PULL_TO_REFRESH &amp;&amp; getVisibleHeight() &lt; mHeight){
+                setState(State.PULL);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 释放
+     * @return true//如果释放后刷新
+     * */
+    public boolean release(){
+        if(mState == State.PULL_TO_REFRESH){
+            setState(State.REFRESHING);
+            smoothScrollTo(mHeight);
+            return true;
+        }
+        if(mState == State.PULL)
+            setState(State.IDLE);
+        else
+            smoothScrollTo(mHeight);
+        return false;
+    }
+
+    /**
+     * 刷新完成
+     * */
+    public boolean complete(){
+        if(mState == State.REFRESHING ||
+            mState == State.COMPLETED) {
+            setState(State.COMPLETED);
+            return true;
+        }
+        return false;
+    }
+}
+</code></pre>
+
+<h3>加载更多</h3>
+<p>加载更多需要实现三种状态:
++ 空闲
++ 加载中
++ 没有更多了</p>
+<p>相关代码逻辑和下拉刷新的View逻辑是类似的, 不在重复代码</p>
+<h3>事件传递</h3>
+<p>接下来是处理Recycler中的事件传递, 主要处理在顶部下拉事件时触发下拉刷新和最后n个Item可见时进行加载更多.
+只需要重写Recyclerview的<code>onTouchEvent</code>和<code>onScrollStateChanged</code>方法就好了
+在这里有一点一定要注意, 不能仅仅在<code>MotionEvent.ACTION_DOWN</code>中取得坐标来计算差值, 在实际中ItemView可能会消费掉事件, 导致坐标值取不到出现错误, 所以要在TouchEvent中直接去坐标差值.
+关键代码如下:</p>
+<pre class='prettyprint linenums'><code class="java">    private float mDownY;
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                mDownY = ev.getRawY();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                final float offsetY = ev.getRawY() - mDownY;
+                if (isOnTop() &amp;&amp; isRefreshEnable) {
+                    if(mHeaderView.pull(offsetY / RATE))
+                        return true;
+                }
+                if(isOnBottom() &amp;&amp; isLoadMoreEnable &amp;&amp; isNoMore){
+                    mFooterView.setHeight(-(int)offsetY/RATE);
+                }
+                break;
+            default:
+                if (isOnTop() &amp;&amp; isRefreshEnable &amp;&amp; mHeaderView.release() &amp;&amp;
+                        mRecyclerListener != null) {
+                    mRecyclerListener.onRefresh();
+                    isRefreshing = true;
+                }
+                if(isOnBottom() &amp;&amp; isLoadMoreEnable &amp;&amp; isNoMore){
+                    mFooterView.hide();
+                }
+                break;
+        }
+        return super.onTouchEvent(ev);
+    }
+
+    @Override
+    public void onScrollStateChanged(int state) {
+        super.onScrollStateChanged(state);
+        if(state != RecyclerView.SCROLL_STATE_IDLE || mRecyclerListener == null ||
+            !isLoadMoreEnable || isLoadMoring || isNoMore) return;
+
+        if(isRefreshing) {
+            mFooterView.setGone();
+            return;
+        }
+        mFooterView.setVisiable();
+
+        LayoutManager layoutManager = getLayoutManager();
+        if(!(layoutManager instanceof  LinearLayoutManager)) return;
+        int last = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
+
+        if (layoutManager.getChildCount() &gt; 0 &amp;&amp;
+            layoutManager.getItemCount() &gt; layoutManager.getChildCount() &amp;&amp;
+            last &gt;= layoutManager.getItemCount() - 1){
+
+            mFooterView.loadMore();
+            mRecyclerListener.onLoadMore();
+            isLoadMoring = true;
+        }
+    }
+</code></pre>
+
+<h3>AdapterWrapper</h3>
+<p>Recycler中没有HeaderView和FooterView 我们只能通过增加ItemView的Type来实现增加Header和Footer
+抽象出一个Adapter来实现该功能:</p>
+<pre class='prettyprint linenums'><code class="java">private class WrapAdapter extends RecyclerView.Adapter&lt;ViewHolder&gt; {
+
+        private RecyclerView.Adapter&lt;ViewHolder&gt; mAdapter;
+
+        @SuppressWarnings(&quot;unchecked&quot;)
+        public WrapAdapter(RecyclerView.Adapter adapter) {
+            mAdapter = adapter;
+        }
+
+        @Override
+        public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+            super.onAttachedToRecyclerView(recyclerView);
+        }
+
+        @Override
+        public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
+            super.onViewAttachedToWindow(holder);
+        }
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            if(viewType &lt; TYPE_BASE){
+                if(viewType &gt;= TYPE_FOOTER){
+                    return new SimpleViewHolder(mFooterViews.get(viewType - TYPE_FOOTER));
+                }
+                if(viewType &gt;= TYPE_HEADER){
+                    return new SimpleViewHolder(mHeaderViews.get(viewType - TYPE_HEADER));
+                }
+                throw new IllegalStateException();
+            }
+            return mAdapter.onCreateViewHolder(parent, viewType - TYPE_BASE);
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            if(mAdapter != null &amp;&amp; getItemViewType(position) &gt;= TYPE_BASE)
+                mAdapter.onBindViewHolder(holder, position - getHeadersCount());
+        }
+
+        @Override
+        public int getItemCount() {
+            return getHeadersCount() + getFootersCount() +
+                (mAdapter != null ? mAdapter.getItemCount() : 0);
+        }
+
+        public int getHeadersCount() {
+            return mHeaderViews.size();
+        }
+
+        public int getFootersCount() {
+            return mFooterViews.size();
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            if(position &lt; 0 || position &gt;= getItemCount()) return -1;
+            if(position &lt; getHeadersCount()){
+                return TYPE_HEADER + position;
+            }
+            if(position &gt;= getItemCount() - getFootersCount()){
+                return TYPE_FOOTER + getItemCount() - position - 1;
+            }
+            return mAdapter == null ? -1 :
+                (TYPE_BASE + mAdapter.getItemViewType(position - getHeadersCount()));
+        }
+
+        @Override
+        public long getItemId(int position) {
+            if(mAdapter == null || position &lt; getHeadersCount() ||
+                position &gt;= mAdapter.getItemCount() + getHeadersCount()) return -1;
+            return mAdapter.getItemId(position - getHeadersCount());
+        }
+
+        @Override
+        public void unregisterAdapterDataObserver(AdapterDataObserver observer) {
+            if (mAdapter != null) {
+                mAdapter.unregisterAdapterDataObserver(observer);
+            }
+        }
+
+        @Override
+        public void registerAdapterDataObserver(AdapterDataObserver observer) {
+            if (mAdapter != null) {
+                mAdapter.registerAdapterDataObserver(observer);
+            }
+        }
+
+        private class SimpleViewHolder extends RecyclerView.ViewHolder {
+            public SimpleViewHolder(View itemView) {
+                super(itemView);
+            }
+        }
+    }
+</code></pre>
+
+<h3>分割线</h3>
+<p>RecyclerView中是没有ListView的分割线的, 我们要实现分割线效果就要自己实现Decoration</p></div>
+    <div id="tags" class='text-right'>
+    
+        <a href="/tag/Android/" class="label label-info tags">Android</a>&nbsp;
+    
+    </div>
+
+    <!-- 多说评论框 start -->
+    <div class="ds-thread p_20" data-thread-key="maorecycler"
+         data-title="MaoRecyclerView" data-url="/article/maorecycler/">
+    </div>
+    <!-- 多说评论框 end -->
+
+            </div>
+            <div id="sidebar" class="col-sm-3 col-xs-12" >
+                <div class="row">
+                    <div class="col-xs-12 sidebar_item font_dft" >
+                        <ul>
+                            <li><a href="/">首页</a></li>
+                            <li><a href="/">关于我</a></li>
+                            <li><a href="/static/bitcoin/bitcoin.htm">Bitcoin简介</a></li>
+                        </ul>
+                    </div>
+                    
+    <div id="sidebar_toc" class="hidden-xs col-xs-12 sidebar_item ml10 font_dft" style="display: none;">
+        <h4>目录</h4>
+        <div id="toc_content"></div>
+    </div>
+
+                </div>
+            </div>
+        </div>
+        <footer class="text-center">
+            <div class="container c_5e">
+                <p><b>Powered By Flask</b></p>
+                <p><b>&copy; 2015-2016 </b></p>
+            </div>
+        </footer>
+	</div>
+	<a id='gotop' href="javascript:"><span>▲</span></a>
+</body>
+<script src="//github.atool.org/canvas-nest.min.js" count="60"></script>
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="/static/js/l.js"></script>
+<script>
+$(function(){
+    load_goto();
+    auto_content_height();
+});
+</script>
+
+<script src="/static/js/prettify.js"></script>
+<script>
+$(function(){
+    prettyPrint();
+    toc_scroll();
+    if(show_toc('.markdown-body h3, .markdown-body h4', 'toc_content')){
+        $("#sidebar_toc").show();
+    }
+    toc_click_scroll();
+})
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+var duoshuoQuery = {short_name:"gjyaiya"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+<!-- 多说公共JS代码 end -->
+</script>
+
+</html>

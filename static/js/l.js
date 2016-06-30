@@ -69,17 +69,12 @@ function toc_scroll() {
 }
 
 //显示目录
-function show_toc(toc_selector, wrap_id, min_nr) {
+function show_toc(toc_selector, wrap_id) {
     var hlist = document.querySelectorAll(toc_selector);
     var wrap = document.getElementById(wrap_id);
 
-    if (!wrap) return;
-
-    if (!hlist || hlist.length <= min_nr) {
-        wrap.style.display = 'none';
-        return;
-    }
-
+    if (!wrap) return false;
+    
     var ul = document.createElement('ul'), li, link;
 
     li = document.createElement('li');
@@ -104,6 +99,7 @@ function show_toc(toc_selector, wrap_id, min_nr) {
         ul.appendChild(li);
     }
     wrap.appendChild(ul);
+    return true;
 }
 
 function toc_click_scroll() {

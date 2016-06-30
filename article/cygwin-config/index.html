@@ -105,10 +105,11 @@ bindkey &quot;^[j&quot; pretty-json
                         <ul>
                             <li><a href="/">首页</a></li>
                             <li><a href="/">关于我</a></li>
+                            <li><a href="/static/bitcoin/bitcoin.htm">Bitcoin简介</a></li>
                         </ul>
                     </div>
                     
-    <div id="sidebar_toc" class="hidden-xs col-xs-12 sidebar_item ml10 font_dft" >
+    <div id="sidebar_toc" class="hidden-xs col-xs-12 sidebar_item ml10 font_dft" style="display: none;">
         <h4>目录</h4>
         <div id="toc_content"></div>
     </div>
@@ -141,7 +142,9 @@ $(function(){
 $(function(){
     prettyPrint();
     toc_scroll();
-    show_toc('.markdown-body h3, .markdown-body h4', 'toc_content', 1)
+    if(show_toc('.markdown-body h3, .markdown-body h4', 'toc_content')){
+        $("#sidebar_toc").show();
+    }
     toc_click_scroll();
 })
 <!-- 多说公共JS代码 start (一个网页只需插入一次) -->

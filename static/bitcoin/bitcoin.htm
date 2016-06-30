@@ -1,0 +1,606 @@
+<!--
+    Powered By nodePPT - This is probably the best web presentation tool so far!
+    version: 1.4.2
+    site: https://github.com/ksky521/nodePPT
+    date: 2016年2月23日
+-->
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>BitCoin 简介 - By gjyaiya</title>
+    <link rel="stylesheet" media="all" href="./css/nodeppt.css">
+    <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="./css/phone.css">
+    
+    <link rel="stylesheet" href="./js/highlight/styles/monokai_sublime.css">
+    <link rel="stylesheet" href="./css/font-awesome.css">
+    
+<link rel="stylesheet" href="./css/theme.moon.css">
+</head>
+<body>
+<div class="slides">
+    <slides id="container">
+        <slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>比特币简介</h1>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<ul class="rollIn">
+<li>比特币是一个分布式的点对点网络系统</li>
+<li><p>比特币通过“挖矿”产生</p>
+<p>挖矿:验证比特币交易的同时参与竞赛来解决一个数学问题,全球化的算力竞争来取代对中央发行机构的需求</p>
+</li>
+<li><p>比特币系统包含调节挖矿难度的协议。挖矿难度是动态调整的,保证不管有多少矿工（CPU）挖矿,平均每10分钟只有一个矿工成功。</p>
+</li>
+<li>比特币协议还规定,每四年新币的开采量减半,同时限制比特币的最终开采总量为2,100万枚(2040年)。</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vleft">
+<h1>简单交易流程</h1>
+<blockquote>
+<p>Alice向Bob支付0.05比特币买一杯咖啡..</p>
+</blockquote>
+<ul class="rollIn">
+<li>Alice(的比特币钱包)从BlockChain中查询到自己还没有使用的比特币(UTXO)</li>
+<li>Alice通过自己的私钥解锁该UTXO, 加上Bob的地址(公钥), 生成一笔新的交易</li>
+<li>把生成的这一笔交易广播给矿工节点（给矿工一丢丢手续费）</li>
+<li>矿工验证这一笔交易的正确的之后, 把交易写入区块链</li>
+<li>Bob在区块链上验证了交易的正确性后（等待6个网络确认），认为这笔交易有效</li>
+<li>Bob给Alice一杯咖啡，交易成功</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vleft">
+<h1>交易(Transaction) </h1>
+<ol>
+<li>加密</li>
+<li>签名</li>
+<li>校验</li>
+</ol>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vleft">
+<h1>非对称加密</h1>
+<img src="http://7xnv8n.com1.z0.glb.clouddn.com/laputa/bitcoin/jiami.png" alt="">
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vleft">
+<h1>椭圆曲线算法(ECC,ECDSA)</h1>
+<div class="columns2">
+<div>
+$$ y^2 mod p = (x^3 + 7) mod p $$
+$$ p = 2^{256}–2^{32}–2^9–2^8–2^7–2^6–2^4–1 $$
+
+<p align="left">给定素数p和椭圆曲线E G为指定基点</p>
+<p align="left">对 K=kG,已知k和G计算K比较容易，而由G和K计算k则比较困难</p>
+<p align="left">至今没有有效的方法来解决这个问题，这就是椭圆曲线算法原理之所在.</p>
+</div><p><img src="http://7xnv8n.com1.z0.glb.clouddn.com/laputa/bitcoin/ecc.png" height="320">
+</div></p>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vleft">
+<h1>私钥k </h1>
+<ul>
+<li>\(1-2^{256}\)</li>
+</ul>
+<blockquote>
+<p>私钥可以是1和n-1之间的任何数字，其中n是一个常数（\(n=1.158*10^{77}\)，略小于\(2^{256}\)）,由比特币所使用的椭圆曲线的阶所定义。
+一般是通过在一个密码学安全的随机源中取出一长串随机字节，对其使用SHA256哈希算法进行运算，这样就可以方便地产生一个256位的数字。
+如果运算结果小于n-1，我们就有了一个合适的私钥。</p>
+</blockquote>
+<h1>公钥K</h1>
+<ul>
+<li>\(K = kG\)</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide hasnote"><aside class="note">
+<section>
+<ul>
+<li>私钥:k 公钥:K,G,Ep(a,b),n</li>
+<li>其中K=kG, G为基点, n为Ep的阶, k&lt;n</li>
+<li>加密M(转换成Ep上的点), 随机整数r &lt; n</li>
+<li>密文: \(C1=M+rK\) \(C2=rG\)</li>
+<li>明文: 
+\begin{align}
+C1-kC2 &amp; = M+rK-k(rG) \\
+&amp; = M+rK-r(kG) \\
+&amp; = M+r(K-kG) \\
+&amp; = M
+\end{align}</li>
+</ul>
+
+</section>
+</aside><section class="slide-wrapper"><article class="flexbox vleft">
+<h1>加密过程:</h1>
+<ul>
+<li>用户A选择一个私有密钥k,并生成公开密钥\(K = kG\)</li>
+<li>用户A将Ep和点K,G传给用户B</li>
+<li>用户B接到信息后,将待传输的明文编码到Ep上一点M，并产生一个随机整数r(r&lt;n)</li>
+<li>用户B计算点\(C1=M+rK\)和\(C2=rG\)</li>
+<li>用户B将C1、C2传给用户A</li>
+<li>用户A接到信息后，计算\(C1-kC2=M\) 得到明文</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vleft">
+<h1>签名过程:</h1>
+<ul>
+<li>选择一条椭圆曲线Ep,和基点G</li>
+<li>选择私有密钥k(k&lt;n),利用基点G计算公开密钥K=kG</li>
+<li>产生一个随机整数r(r&lt;n),计算点R=rG</li>
+<li>将context和点R的坐标值x,y作为参数,计算Hash=SHA(context,x,y)</li>
+<li>计算\(sig=r-Hash*k(mod n)\)</li>
+<li>将sig和Hash作为context的签名</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide hasnote"><aside class="note">
+<section>
+<ul>
+<li>签名文字:context 签名:sig Hash</li>
+<li>其中R(x,y)=rG Hash=SHA(context,x,y)</li>
+<li>\(sig=r-Hash*k(mod n)\)</li>
+<li>r随机选择, k私钥不会泄露
+\begin{align}
+sig*G+Hash*K &amp; = (r - Hash*k)*G+Hash*K \\
+&amp; = rG - Hash*kG + Hash*K \\
+&amp; = rG - Hash*K + Hash*K \\
+&amp; = rG \\
+&amp; = R 
+\end{align}</li>
+</ul>
+
+</section>
+</aside><section class="slide-wrapper"><article class="flexbox vleft">
+<h1>签名验证:</h1>
+<ul>
+<li>从用户签名中,提取sig以及Hash</li>
+<li>如果sig Hash正确,可以计算点R(x,y)的坐标</li>
+<li>已知 \(sig=r-Hash*k \)</li>
+<li>计算 \( sig*G+Hash*K=R \)</li>
+<li>将context和点R的坐标值x,y作为参数，计算H=SHA(context,x,y)</li>
+<li>如果H=Hash 则成功.如果H≠Hash,则失败</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<h2>椭圆曲线ECC加密算法与RSA加密算法的比较</h2>
+<ul>
+<li>安全性能更高 如160位ECC与1024位RSA、DSA有相同的安全强度。</li>
+<li>计算量小，处理速度快 在私钥的处理速度上（解密和签名），ECC远 比RSA、DSA快得多。</li>
+<li>存储空间占用小 ECC的密钥尺寸和系统参数与RSA、DSA相比要小得多， 所以占用的存储空间小得多。</li>
+<li>带宽要求低使得ECC具有广泛得应用前景。</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide hasnote"><aside class="note">
+<section>
+<ul>
+<li>Base64: [A-Za-z0-9+/]</li>
+<li>Base58: Base64 - [IlO0+/]</li>
+<li><p>Base58Check编码：一种Base58格式的、有版本的、经过校验的格式，可以明确的对比特币数据编码的编码格式</p>
+</li>
+<li><p>$ bitcoind getnewaddress</p>
+</li>
+<li>$ bitcoind dumpprivkey (address)</li>
+</ul>
+
+</section>
+</aside><section class="slide-wrapper"><article>
+<h2>公钥生成地址</h2>
+<img src="http://7xnv8n.com1.z0.glb.clouddn.com/laputa/bitcoin/address.png" alt="">
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<h2>靓号地址</h2>
+<img src="http://7xnv8n.com1.z0.glb.clouddn.com/laputa/bitcoin/lianghao.png" alt="">
+<blockquote>
+<p>生成 KidsCharity 开头的地址</p>
+</blockquote>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<h2>交易结构</h2>
+<img src="http://7xnv8n.com1.z0.glb.clouddn.com/laputa/bitcoin/tx.png" alt="">
+<div class="columns2">
+<img src="http://7xnv8n.com1.z0.glb.clouddn.com/laputa/bitcoin/tx_in.png">
+<img src="http://7xnv8n.com1.z0.glb.clouddn.com/laputa/bitcoin/tx_out.png">
+</div>
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vleft">
+<h1>交易脚本</h1>
+<p>比特币的交易验证引擎依赖于两类脚本来验证比特币交易：一个锁定脚本和一个解锁脚本。</p>
+<h2>锁定脚本</h2>
+<ul>
+<li>放在输出上的“障碍”，同时它明确了今后花费这笔输出的条件。</li>
+<li>通常包含一个公钥</li>
+</ul>
+<h2>解锁脚本</h2>
+<ul>
+<li>“解决”或满足被锁定脚本在一个输出上设定的花费条件的脚本，同时它将允许输出被消费。</li>
+<li>往往含有一个被用户的比特币钱包（通过用户的私钥）生成的数字签名</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<h2>脚本是酱紫的</h2>
+<img src="http://7xnv8n.com1.z0.glb.clouddn.com/laputa/bitcoin/sc.png" alt="">
+<div class="columns2">
+<img src="http://7xnv8n.com1.z0.glb.clouddn.com/laputa/bitcoin/sc_1.png">
+<img src="http://7xnv8n.com1.z0.glb.clouddn.com/laputa/bitcoin/sc_2.png">
+</div>
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<h2>P2PKH（Pay-to-Public-Key-Hash）</h2>
+<blockquote>
+<p>比特币网络上的大多数交易都是P2PKH交易，此类交易都含有一个锁定脚本，该脚本由公钥哈希实现阻止输出功能</p>
+</blockquote>
+<ul class="flexbox vleft">
+<li><p>锁定脚本 </p>
+<blockquote>
+<p>OP_DUP OP_HASH160 (Cafe Public Key Hash) OP_EQUAL OP_CHECKSIG
+Cafe Public Key Hash即为咖啡馆的比特币地址Hash</p>
+</blockquote>
+</li>
+<li><p>解锁脚本</p>
+<blockquote>
+<p>(Cafe Signature) (Cafe Public Key)</p>
+</blockquote>
+</li>
+<li><p>将两个脚本结合起来可以形成如下有效组合脚本</p>
+<blockquote>
+<p>(Cafe Signature) (Cafe Public Key) OP_DUP OP_HASH160 (Cafe Public Key Hash) OP_EQUAL OP_CHECKSIG</p>
+</blockquote>
+</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<h2>P2PK（Pay-to-Public-Key）</h2>
+<blockquote>
+<p>与P2PKH相比，P2PK模式更为简单。公钥本身已经存储在锁定脚本中，而且代码长度也更短。P2PKH是由Satoshi创建的，主要目的一方面为使比特币地址更简短，另一方面也使之更方便使用。P2PK目前在Coinbase交易中最为常见，Coinbase交易由老的采矿软件产生，目前还没更新至P2PKH。</p>
+</blockquote>
+<ul class="flexbox vleft">
+<li><p>锁定脚本 </p>
+<blockquote>
+<p>(Public Key A) OP_CHECKSIG</p>
+</blockquote>
+</li>
+<li><p>解锁脚本</p>
+<blockquote>
+<p>(Signature from Private Key A)</p>
+</blockquote>
+</li>
+<li><p>将两个脚本结合起来可以形成如下有效组合脚本</p>
+<blockquote>
+<p>(Signature from Private Key A) (Public Key A) OP_CHECKSIG</p>
+</blockquote>
+</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<h2>多重签名</h2>
+<blockquote>
+<p>假如记录在脚本中的公钥个数为N，则至少需提供其中的M个公钥才可以解锁。这也被称为M-N组合，其中，N是记录在脚本中的公钥总个数，M是使得多重签名生效的公钥数阀值</p>
+</blockquote>
+<ul class="flexbox vleft">
+<li><p>锁定脚本 </p>
+<blockquote>
+<p>M (Public Key 1) (Public Key 2) ... (Public Key N) N OP_CHECKMULTISIG</p>
+</blockquote>
+</li>
+<li><p>解锁脚本</p>
+<blockquote>
+<p>OP_0 (Signature B) (Signature C)</p>
+</blockquote>
+</li>
+<li><p>将两个脚本结合起来可以形成如下有效组合脚本 M=2 N=3</p>
+<blockquote>
+<p>OP_0 (Signature B) (Signature C) 2 (Public Key A) (Public Key B) (Public Key C) 3 OP_CHECKMULTISIG</p>
+</blockquote>
+</li>
+<li><p>验证未解锁脚本是否含有与3个公钥中的任意2个相一致的私钥的有效签名。</p>
+</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vleft">
+<h1>钱包 </h1>
+<ul>
+<li><p>储存私钥:</p>
+<ul>
+<li>种子钱包</li>
+<li>非确定钱包 (Just a Bunch Of Keys (JBOK))</li>
+<li>纸钱包 脑钱包 冷钱包 ...</li>
+</ul>
+</li>
+<li><p>记录UTXO</p>
+</li>
+<li>验证交易</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide hasnote"><aside class="note">
+<section>
+<p>打个比方来说，每个全节点就像是一个在陌生城市里的游客，他带着一张包含每条街道、每个地址的详细地图。相比之下，SPV节点就像是这名陌生城市里的游客只知道一条主干道的名字，通过随机询问该城市的陌生人来获取分段道路指示。虽然两种游客都可以通过实地考察来验证一条街是否存在，但没有地图的游客不知道每个小巷中有哪些街道，也不知道附近还有什么其他街道。没有地图的游客在“教堂街23号”的前面，并不知道这个城市里是否还有其他若干条“教堂街23号”，也不知道面前的这个是否是要找的那个。对他来说，最好的方式就是向足够多的人问路，并且希望其中一部分人不是要试图抢劫他。</p>
+
+</section>
+</aside><section class="slide-wrapper"><article class="flexbox vleft">
+<h1>简单支付验证(SPV)</h1>
+<p>SPV节点只需下载区块头，而不用下载包含在每个区块中的交易信息。由此产生的不含交易信息的区块链，大小只有完整区块链的1/1000。SPV节点不能构建所有可用于消费的UTXO的全貌，这是由于它们并不知道网络上所有交易的完整信息。SPV节点验证交易时所使用的方法略有不同，这个方法需依赖对等节点“按需”提供区块链相关部分的局部视图。</p>
+
+</article></section></slide>
+<slide class="slide hasnote"><aside class="note">
+<section>
+<p>用我们之前的例子，一位手中没有地图的游客需要询问去特定地方的路线。如果他向陌生人询问“教堂街23号在哪里”，不经意之间，他就暴露了自己的目的地。Bloom过滤器则会这样问，附近有带‘堂’字的街道吗？”这样的问法包含了比之前略少的关键词。这位游客可以自己选择包含信息的多少，比如“以‘堂街’结尾”或者“‘教’字开头的街道”。如果他问得越少，得到了更多可能的地址，隐私得到了保护，但这些地址里面不乏无关的结果；如果他问得非常具体，他在得到较准确的结果的同时也暴露了自己的隐私。</p>
+
+</section>
+</aside><section class="slide-wrapper"><article class="flexbox vleft">
+<h1>Bloom过滤器</h1>
+<ul>
+<li>允许用户描述特定的关键词组合而不必精确表述的基于概率的过滤方法。它能让用户在有效搜索关键词的同时保护他们的隐私。</li>
+<li>在SPV节点里，这一方法被用来向对等节点发送交易信息查询请求，同时交易地址不会被暴露。</li>
+<li>Bloom过滤器可以让SPV节点指定交易的搜索模式，该搜索模式可以基于准确性或私密性的考虑被调节。</li>
+<li>一个非常具体的Bloom过滤器会生成更准确的结果，但也会显示该用户钱包里的使用的地址；反之，如果过滤器只包含简单的关键词，更多相应的交易会被搜索出来，在包含若干无关交易的同时有着更高的私密性。</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vleft">
+<h1>区块链(BlockChain) </h1>
+<ul>
+<li>比特币网络</li>
+<li>矿工</li>
+<li>交易池</li>
+<li>区块链结构</li>
+<li>区块链分叉</li>
+<li>攻击</li>
+<li>侧链</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<h2>比特币网络</h2>
+<img src="http://7xnv8n.com1.z0.glb.clouddn.com/laputa/bitcoin/jiedian.png" alt="">
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<h2>新加入的节点</h2>
+<div class="columns2">
+<img src="http://7xnv8n.com1.z0.glb.clouddn.com/laputa/bitcoin/jiaru.png">
+<img src="http://7xnv8n.com1.z0.glb.clouddn.com/laputa/bitcoin/chuanshu.png">
+</div>
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<h2>区块链(BlockChain)</h2>
+<div class="columns2">
+<div>
+<p>区块结构:</p>
+<img src="http://7xnv8n.com1.z0.glb.clouddn.com/laputa/bitcoin/block.png">
+<p>区块头:</p>
+<img src="http://7xnv8n.com1.z0.glb.clouddn.com/laputa/bitcoin/blockheader.png">
+</div><p><img src="http://7xnv8n.com1.z0.glb.clouddn.com/laputa/bitcoin/chain.png">
+</div></p>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vleft">
+<h1>Merkle Tree  </h1>
+<blockquote>
+<p>哈希二叉树,作快速归纳和校验大规模数据完整性的数据结构</p>
+</blockquote>
+<ul>
+<li>结构
+<img src="http://7xnv8n.com1.z0.glb.clouddn.com/laputa/bitcoin/merkle.png"></li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<h2>快速验证交易</h2>
+<img src="http://7xnv8n.com1.z0.glb.clouddn.com/laputa/bitcoin/merkle2.png">
+
+</article></section></slide>
+<slide class="slide hasnote"><aside class="note">
+<section>
+<ul>
+<li>交易的优先级是通过输入值和输入的“块龄”乘积之和除以交易的总长度得到的：</li>
+<li>Priority = Sum (Value of input * Input Age) / Transaction Size</li>
+<li>一个交易想要成为“较高优先级”，需满足的条件：优先值大于57,600,000，相当于一个比特币（即100万聪），年龄为一天（144个区块），交易的大小为250个字节：</li>
+<li>High Priority &gt; 100,000,000 satoshis * 144 blocks / 250 bytes = 57,600,000</li>
+<li>区块中用来存储交易的前50K字节是保留给较高优先级交易的。然后选较高矿工费的交易</li>
+</ul>
+
+</section>
+</aside><section class="slide-wrapper"><article class="flexbox vleft">
+<h1>开始挖矿 第一步</h1>
+<h2>整合交易池中的交易</h2>
+<blockquote>
+<p>比特币网络中几乎每个节点都会维护一份未确认交易的临时列表，被称为内存池或交易池</p>
+</blockquote>
+<ul>
+<li>交易独立校验<ul>
+<li>交易字节</li>
+<li>输入输出</li>
+<li>锁定脚本符合标准</li>
+<li>解锁脚本验证正确</li>
+</ul>
+</li>
+<li>交易块龄，矿工费和优先级</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vleft">
+<h1>开始挖矿 第二步</h1>
+<h2>CoinBase 和交易费</h2>
+<ul>
+<li>CoinBase 奖励
+<img src="http://7xnv8n.com1.z0.glb.clouddn.com/laputa/bitcoin/coinbase.png" alt=""></li>
+<li>交易费
+  Total Fees = Sum(Inputs) - Sum(Outputs)</li>
+<li>写入区块第一个交易</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vleft">
+<h1>开始挖矿 第三步</h1>
+<h2>构造区块头</h2>
+<ul>
+<li>工作量证明算法(POW)</li>
+<li>不停地修改区块, 使其Hash满足条件(小于某个难度值)</li>
+</ul>
+<blockquote>
+<p>根据节点算力的提升, 减小目标阀值, 使10分钟左右生成一个区块</p>
+<p>New Difficulty = Old Difficulty * (Actual Time of Last 2016 Blocks / 20160 minutes)</p>
+</blockquote>
+<ul>
+<li>随机值升位</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vleft">
+<h1>开始挖矿 第四步</h1>
+<h2>广播区块链</h2>
+<ul>
+<li>把满足条件的区块写入区块链</li>
+<li>广播给其他节点</li>
+<li>验证区块</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vleft">
+<h1>区块链分叉 </h1>
+<img src="http://7xnv8n.com1.z0.glb.clouddn.com/laputa/bitcoin/fork1.png" alt="">
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vleft">
+<h1>区块链分叉 </h1>
+<img src="http://7xnv8n.com1.z0.glb.clouddn.com/laputa/bitcoin/fork2.png" alt="">
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vleft">
+<h1>区块链分叉 </h1>
+<img src="http://7xnv8n.com1.z0.glb.clouddn.com/laputa/bitcoin/fork3.png" alt="">
+
+</article></section></slide>
+<slide class="slide hasnote"><aside class="note">
+<section>
+<p>从理论上来说，两个区块的分叉是有可能的，这种情况发生在因先前分叉而相互对立起来的矿工，又几乎同时发现了两个不同区块的解。然而，这种情况发生的几率是很低的。单区块分叉每周都会发生，而双块分叉则非常罕见。
+比特币将区块间隔设计为10分钟，是在更快速的交易确认和更低的分叉概率间作出的妥协。更短的区块产生间隔会让交易清算更快地完成，也会导致更加频繁地区块链分叉。与之相对地，更长的间隔会减少分叉数量，却会导致更长的清算时间。</p>
+
+</section>
+</aside><section class="slide-wrapper"><article class="flexbox vleft">
+<h1>区块链分叉 </h1>
+<img src="http://7xnv8n.com1.z0.glb.clouddn.com/laputa/bitcoin/fork4.png" alt="">
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vleft">
+<h1>攻击 51%</h1>
+<ul>
+<li>一个算力大于51%的节点 产生一笔输出</li>
+<li>自己不承认这笔输出, 疯狂的自己计算区块写入区块链</li>
+<li>总有一个时间,这个节点的区块链长度会超过原来区块链</li>
+</ul>
+<h2>获利</h2>
+<h2>其他意图</h2>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vleft">
+<h1>侧链</h1>
+<ul>
+<li><p>为了扩充比特币的交易量</p>
+<blockquote>
+<p>当前，比特币网络只支持每秒约7笔交易，而Visa则每秒大约支持45000笔交易</p>
+</blockquote>
+</li>
+<li><p>扩大区块? 侧链?</p>
+</li>
+<li>切换自己的区块链节点(交易平台) 降低了去中心化</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vleft">
+<h1>参考资料</h1>
+<p><a href="https://bitcoin.org/en/developer-guide" target="_blank">Develop Guide</a>
+<a href="http://www.zhibimo.com/read/wang-miao/mastering-bitcoin/index.html" target="_blank">MasterBitcoin</a>
+<a href="https://github.com/valery0510/mbcn" target="_blank">MasterBitcoin(Github)</a></p>
+
+</article></section></slide>
+        
+
+        <!-- <slide class="slide logoslide dark nobackground">
+            <article class="flexbox vcenter">
+                <h2 style="color: white;">Powered By nodePPT v1.4.2</h2>
+            </article>
+        </slide> -->
+        <div class="slideTip" id="tip"></div>
+    </slides>
+</div>
+<canvas id="drawBoard" class="draw-board" width="900" height="700"></canvas>
+<div class="progress"><span id="progress"></span></div>
+<div id="_buttons">
+    <div class="_btn-box" id="_btn-box" style="display:none;">
+        <button class="fa fa-arrow-circle-left" id="_btn-prev"></button>
+        <button class="fa fa-arrow-circle-right" id="_btn-next"></button>
+        <button class="fa fa-paint-brush" id="_btn-brush"></button>
+        <button class="fa fa-compress" id="_btn-overview" data-toggle="fa fa-expand"></button>
+    </div>
+    <button class="fa fa-bars" id="_btn-bar"  data-toggle="fa fa-close"></button>
+</div>
+<script src="./js/mixjs/lib/mix.0.3.0.min.js"></script>
+<script>
+var base = location.protocol + '//' + location.host;
+
+var path = (location.pathname + '#').split('/').filter(function(v){
+    return !!v;
+});
+path.pop();
+path = path.join('/');
+MixJS.config({
+    baseURL: [ base, path, 'js'].join('/')+'/'
+});
+
+</script>
+<script src="./js/mixjs/lib/event/broadcast.js"></script>
+<script src="./js/nodeppt.js"></script>
+<script>
+Slide.init({
+    containerID: 'container',
+    drawBoardID: 'drawBoard',
+    slideClass: '.slide',
+    buildClass: '.build',
+    progressID: 'progress',
+    transition: 'slide3',
+    width: 1100,
+    dir: './',
+    
+    //打开下面的注释就开启postMessage方式
+    //访问网址127.0.0.1:8080/ppt/demo#client
+    control:{
+        type: 'postMessage',
+        args:{
+            isControl:  false
+        }
+    },
+    
+    tipID: 'tip'
+});
+MixJS.loadJS('highlight/highlight.pack.js',function(){
+    hljs.tabReplace = '  ';
+    hljs.initHighlightingOnLoad();
+});
+</script>
+
+
+<!-- MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+  config: ["TeX-AMS-MML_HTMLorMML.js"],
+  tex2jax: {inlineMath: [['\\(','\\)']]}});
+  //['$','$'], 避免货币价格冲突
+</script>
+<script src="http://cdn.bootcss.com/mathjax/2.6.1/MathJax.js"></script>
+
+<!--placeholder-->
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Vimous" />
+    <link rel="shortcut icon" href="/static/favicon.png">
+
+    <title>
+    经典的车和羊的问题 | Laputa
+</title>
+
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <link href="/static/css/l.css" rel="stylesheet">
+    <link href="/static/css/prettify.css" rel="stylesheet">
+</head>
+<body>
+	<div class="container">
+        <div id="main_content" class="row" >
+            <div id = "content" class="col-sm-9 col-xs-12">
+                
+    <h2 class="pl_20 font_dft"><a href="/article/a1/">经典的车和羊的问题</a></h2>
+    <hr class="hr_m10">
+    <div class="text-right c_blue font_dft pr_20">
+        Vimous&nbsp;&middot;&nbsp;2012-04-04&nbsp;&middot;&nbsp;Algorithm
+    </div>
+    <div class="markdown-body font_dft"><p>原题：</p>
+<p>节目现场有三扇门，其中一扇门后有辆车，其它两扇门后各是一只山羊。从正面看不出区别。主持人会叫一个观众上来，让其选其中的一扇门。当他选定后，这时，知晓每扇门后是什么东西的主持人会打开剩下两扇门中的有山羊的一扇门。这时现场有两扇门没打开：观众选定的，和剩下的另一扇。主持人此时会让这观众在没打开的两扇门中再做一次选择。是坚持选原来的那扇门，还是改选剩下的没被打开的那扇门？</p>
+<p>答案：</p>
+<p>改选剩下的没被打开的那扇门</p>
+<p>分析：</p>
+<p>这是一道经典的概率问题。我开始的考虑：第一次选择是没有意义的，当主持人打开第二扇门的之后，才是真正的选择，这样选到车的概率是50%。</p>
+<p>但是，忽略掉一个问题：主持人是知道哪扇门中是有车的，他打开的总是有羊的门。</p>
+<p>因此，第一次的选择是不能忽略掉的。</p>
+<p>假设第一次选到车（33%），主持人无论选那个门都可以，要是改选，一定会选到羊。</p>
+<p>假设第一次选到羊（66%），主持人只能选则剩下那一只羊的门，这样如果改选，一定选到车。</p>
+<p>SO，改选的话选到车的概率是66%。</p>
+<p>要是，第一次选择后，主持人让自己打开其他两扇门中的一个门，结果发现时羊。这样是否改选的概率都是50%了吧。</p></div>
+    <div id="tags" class='text-right'>
+    
+        <a href="/tag/Algorithm/" class="label label-info tags">Algorithm</a>&nbsp;
+    
+    </div>
+
+    <!-- 多说评论框 start -->
+    <div class="ds-thread p_20" data-thread-key="a1"
+         data-title="经典的车和羊的问题" data-url="/article/a1/">
+    </div>
+    <!-- 多说评论框 end -->
+
+            </div>
+            <div id="sidebar" class="col-sm-3 col-xs-12" >
+                <div class="row">
+                    <div class="col-xs-12 sidebar_item font_dft" >
+                        <ul>
+                            <li><a href="/">首页</a></li>
+                            <li><a href="/">关于我</a></li>
+                            <li><a href="/static/bitcoin/bitcoin.htm">Bitcoin简介</a></li>
+                        </ul>
+                    </div>
+                    
+    <div id="sidebar_toc" class="hidden-xs col-xs-12 sidebar_item ml10 font_dft" style="display: none;">
+        <h4>目录</h4>
+        <div id="toc_content"></div>
+    </div>
+
+                </div>
+            </div>
+        </div>
+        <footer class="text-center">
+            <div class="container c_5e">
+                <p><b>Powered By Flask</b></p>
+                <p><b>&copy; 2015-2016 </b></p>
+            </div>
+        </footer>
+	</div>
+	<a id='gotop' href="javascript:"><span>▲</span></a>
+</body>
+<script src="//github.atool.org/canvas-nest.min.js" count="60"></script>
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="/static/js/l.js"></script>
+<script>
+$(function(){
+    load_goto();
+    auto_content_height();
+});
+</script>
+
+<script src="/static/js/prettify.js"></script>
+<script>
+$(function(){
+    prettyPrint();
+    toc_scroll();
+    if(show_toc('.markdown-body h3, .markdown-body h4', 'toc_content')){
+        $("#sidebar_toc").show();
+    }
+    toc_click_scroll();
+})
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+var duoshuoQuery = {short_name:"gjyaiya"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+<!-- 多说公共JS代码 end -->
+</script>
+
+</html>

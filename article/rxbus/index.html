@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Vimous" />
+    <link rel="shortcut icon" href="/static/favicon.png">
+
+    <title>
+    一个RxBus实现 | Laputa
+</title>
+
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <link href="/static/css/l.css" rel="stylesheet">
+    <link href="/static/css/prettify.css" rel="stylesheet">
+</head>
+<body>
+	<div class="container">
+        <div id="main_content" class="row" >
+            <div id = "content" class="col-sm-9 col-xs-12">
+                
+    <h2 class="pl_20 font_dft"><a href="/article/rxbus/">一个RxBus实现</a></h2>
+    <hr class="hr_m10">
+    <div class="text-right c_blue font_dft pr_20">
+        Vimous&nbsp;&middot;&nbsp;2016-06-20&nbsp;&middot;&nbsp;Android
+    </div>
+    <div class="markdown-body font_dft"><h3>1. RxJava基本概念</h3>
+<p>Rxjava是一个响应式编程框架, 目的是通过观察者模式, 异步通知事件.</p>
+<p>在RxJava的世界里，我们有四种角色：
++ <strong>Observable</strong> (可观察者，即被观察者)
++ <strong>Observer</strong> (观察者)
++ <strong>Subscriber</strong> (订阅)
++ <strong>Subjects</strong>
+<code>Observable</code>和<code>Subjects</code>是两个“生产”实体，<code>Observers</code>和<code>Subscribers</code>是两个“消费”实体。</p>
+<h3>2. RxJava基本语法</h3>
+<h5>1. 创建Observer(new OnClickListener())</h5>
+<pre class='prettyprint linenums'><code class="java">Observer&lt;String&gt; observer = new Observer&lt;String&gt;() {
+    @Override
+    public void onNext(String s) {
+        Log.d(tag, &quot;Item: &quot; + s);
+    }
+
+    @Override
+    public void onCompleted() {
+        Log.d(tag, &quot;Completed!&quot;);
+    }
+
+    @Override
+    public void onError(Throwable e) {
+        Log.d(tag, &quot;Error!&quot;);
+    }
+};
+</code></pre>
+
+<p>除了 Observer 接口之外，RxJava 还内置了一个实现了 Observer 的抽象类：<strong>Subscriber</strong>
+Subscriber 相对于 Observer有增加了控制生命周期的方法.
+针对Observer每个方法 都有对应的Action方法 : <code>Action1&lt;String&gt;</code>, <code>Action1&lt;Throwable&gt;</code>, <code>Action0()</code></p>
+<h5>2. 创建 Observable(new Button())</h5>
+<pre class='prettyprint linenums'><code class="java">Observable observable = Observable.create(new Observable.OnSubscribe&lt;String&gt;() {
+    @Override
+    public void call(Subscriber&lt;? super String&gt; subscriber) {
+        subscriber.onNext(&quot;Hello&quot;);
+        subscriber.onNext(&quot;Hi&quot;);
+        subscriber.onNext(&quot;Aloha&quot;);
+        subscriber.onCompleted();
+    }
+});
+</code></pre>
+
+<p>当 Observable 被订阅的时候，OnSubscribe 的 call() 方法会自动被调用
+除了create()方法之外, 还有just(),from()等等快速创建Observable的方法</p>
+<h5>3.subscribe订阅 (Button.setOnClickListener(OnClickListener))</h5>
+<pre class='prettyprint linenums'><code class="java">observable.subscribe(observer);
+// 或者：
+observable.subscribe(subscriber);
+// 自动创建 Subscriber ，并使用 onNextAction 来定义 onNext()
+observable.subscribe(onNextAction);
+// 自动创建 Subscriber ，并使用 onNextAction 和 onErrorAction 来定义 onNext() 和 onError()
+observable.subscribe(onNextAction, onErrorAction);
+// 自动创建 Subscriber ，并使用 onNextAction、 onErrorAction 和 onCompletedAction 来定义 onNext()、 onError() 和 onCompleted()
+observable.subscribe(onNextAction, onErrorAction, onCompletedAction);
+</code></pre>
+
+<h3>3.线程控制</h3>
+<h5>1.Scheduler</h5>
+<pre class='prettyprint linenums'><code class="java">Observable.just(1, 2, 3, 4)
+    .subscribeOn(Schedulers.io()) // 指定 subscribe() 发生在 IO 线程
+    .observeOn(AndroidSchedulers.mainThread()) // 指定 Subscriber 的回调发生在主线程
+    .subscribe(new Action1&lt;Integer&gt;() {
+        @Override
+        public void call(Integer number) {
+            Log.d(tag, &quot;number:&quot; + number);
+        }
+    });
+</code></pre>
+
+<ul>
+<li><strong>Schedulers.immediate()</strong>: 直接在当前线程运行，相当于不指定线程。这是默认的 Scheduler。</li>
+<li><strong>Schedulers.newThread()</strong>: 总是启用新线程，并在新线程执行操作。</li>
+<li><strong>Schedulers.io()</strong>: I/O 操作（读写文件、读写数据库、网络信息交互等）所使用的 Scheduler。行为模式和 newThread() 差不多，区别在于 io() 的内部实现是是用一个无数量上限的线程池，可以重用空闲的线程，因此多数情况下 io() 比 newThread() 更有效率。不要把计算工作放在 io() 中，可以避免创建不必要的线程。</li>
+<li><strong>Schedulers.computation()</strong>: 计算所使用的 Scheduler。这个计算指的是 CPU 密集型计算，即不会被 I/O 等操作限制性能的操作，例如图形的计算。这个 Scheduler 使用的固定的线程池，大小为 CPU 核数。不要把 I/O 操作放在 computation() 中，否则 I/O 操作的等待时间会浪费 CPU。</li>
+<li><strong>AndroidSchedulers.mainThread()</strong>，它指定的操作将在 Android 主线程运行。</li>
+</ul>
+<h3>4.RxBus</h3>
+<p>在Rxjava中 Subject即充当了Observable的角色又充当了Observer的角色, 因此我们可以设计一个单例模式, 通过Subject来实现一个RxBus.</p>
+<pre class='prettyprint linenums'><code class="java">public class RxBus {
+    private static final String TAG = RxBus.class.getSimpleName();
+
+    private static class RxBusHolder {
+        private static RxBus instance = new RxBus();
+    }
+
+    public static RxBus getInstance() {
+        return RxBusHolder.instance;
+    }
+
+    private Subject subject;
+    private RxBus() {
+        subject = new SerializedSubject&lt;&gt;(PublishSubject.create());
+    }
+
+    public &lt;T&gt; Observable toObservable(Class&lt;T&gt; eventType) {
+        return subject.ofType(eventType);
+    }
+
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public void post(Object o) {
+        subject.onNext(o);
+    }
+
+}
+</code></pre>
+
+<p>测试代码如下:</p>
+<pre class='prettyprint linenums'><code class="java">//P1
+public class P1  {
+    Subscription s1,s2;
+
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public void listen(final String tag){
+        s1 = RxBus.getInstance().toObservable(M1.class)
+                .subscribe(new Action1&lt;M1&gt;() {
+                    @Override
+                    public void call(M1 o) {
+                        Log.i(tag,o.getName());
+                    }
+                });
+
+        s2 = RxBus.getInstance().toObservable(M2.class)
+                .subscribe(new Action1&lt;M2&gt;() {
+                    @Override
+                    public void call(M2 o) {
+                        Log.i(tag,o.getName());
+                    }
+                });
+
+
+    }
+
+    public void destroy(){
+        if(s1 != null &amp;&amp; !s1.isUnsubscribed()) s1.unsubscribe();
+        if(s2 != null &amp;&amp; !s2.isUnsubscribed()) s2.unsubscribe();
+    }
+}
+
+//M1
+public class M1 {
+
+    public String getName(){
+        return &quot;M1111111111111111&quot;;
+    }
+}
+
+//M2
+public class M2 {
+
+    public String getName(){
+        return &quot;M222222222222222&quot;;
+    }
+}
+
+
+//Activity
+public class TestActivity extends BaseActivity {
+    P1 p1;
+    P2 p2;
+
+    public static void start(Context context) {
+        Intent starter = new Intent(context, TestActivity.class);
+        context.startActivity(starter);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.ac_test);
+
+        p1 = new P1();
+        p1.listen(&quot;---&gt;T1&quot;);
+        p2 = new P2();
+        p2.listen();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                RxBus.getInstance().post(new M1());
+                RxBus.getInstance().post(new M2());
+            }
+        }, 3000);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        p1.destroy();
+        p2.destroy();
+    }
+}
+</code></pre></div>
+    <div id="tags" class='text-right'>
+    
+        <a href="/tag/Android/" class="label label-info tags">Android</a>&nbsp;
+    
+    </div>
+
+    <!-- 多说评论框 start -->
+    <div class="ds-thread p_20" data-thread-key="rxbus"
+         data-title="一个RxBus实现" data-url="/article/rxbus/">
+    </div>
+    <!-- 多说评论框 end -->
+
+            </div>
+            <div id="sidebar" class="col-sm-3 col-xs-12" >
+                <div class="row">
+                    <div class="col-xs-12 sidebar_item font_dft" >
+                        <ul>
+                            <li><a href="/">首页</a></li>
+                            <li><a href="/">关于我</a></li>
+                            <li><a href="/static/bitcoin/bitcoin.htm">Bitcoin简介</a></li>
+                        </ul>
+                    </div>
+                    
+    <div id="sidebar_toc" class="hidden-xs col-xs-12 sidebar_item ml10 font_dft" style="display: none;">
+        <h4>目录</h4>
+        <div id="toc_content"></div>
+    </div>
+
+                </div>
+            </div>
+        </div>
+        <footer class="text-center">
+            <div class="container c_5e">
+                <p><b>Powered By Flask</b></p>
+                <p><b>&copy; 2015-2016 </b></p>
+            </div>
+        </footer>
+	</div>
+	<a id='gotop' href="javascript:"><span>▲</span></a>
+</body>
+<script src="//github.atool.org/canvas-nest.min.js" count="60"></script>
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="/static/js/l.js"></script>
+<script>
+$(function(){
+    load_goto();
+    auto_content_height();
+});
+</script>
+
+<script src="/static/js/prettify.js"></script>
+<script>
+$(function(){
+    prettyPrint();
+    toc_scroll();
+    if(show_toc('.markdown-body h3, .markdown-body h4', 'toc_content')){
+        $("#sidebar_toc").show();
+    }
+    toc_click_scroll();
+})
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+var duoshuoQuery = {short_name:"gjyaiya"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+<!-- 多说公共JS代码 end -->
+</script>
+
+</html>
