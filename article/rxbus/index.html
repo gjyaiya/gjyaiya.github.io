@@ -116,20 +116,46 @@ observable.subscribe(onNextAction, onErrorAction, onCompletedAction);
         return RxBusHolder.instance;
     }
 
-    private Subject subject;
+    public static RxBus instance(){
+        return RxBusHolder.instance;
+    }
+
+    private Subject mSubject;
+    private Subject&lt;RxEvent, RxEvent&gt; mEventSubject;
+
     private RxBus() {
-        subject = new SerializedSubject&lt;&gt;(PublishSubject.create());
+        mSubject = new SerializedSubject&lt;&gt;(PublishSubject.create());
+        mEventSubject = new SerializedSubject&lt;&gt;(PublishSubject.&lt;RxEvent&gt;create());
     }
 
     public &lt;T&gt; Observable toObservable(Class&lt;T&gt; eventType) {
-        return subject.ofType(eventType);
+        return mSubject.ofType(eventType);
     }
 
     @SuppressWarnings(&quot;unchecked&quot;)
     public void post(Object o) {
-        subject.onNext(o);
+        mSubject.onNext(o);
     }
 
+    public Observable listen(final RxEvent event){
+        return mEventSubject.filter(new Func1&lt;RxEvent, Boolean&gt;() {
+            @Override
+            public Boolean call(RxEvent e) {
+                return e == event;
+            }
+        });
+    }
+
+    public void post(RxEvent event){
+        mEventSubject.onNext(event);
+    }
+}
+
+public interface RxEvent {
+    int EVENT_BASE = 1024;
+    int EVENT_BASE_EMPTY = EVENT_BASE + 1;
+
+    int getUniqueID();
 }
 </code></pre>
 

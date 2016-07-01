@@ -190,9 +190,10 @@ So, 想用RecyclerView, 就只好自己实现下拉刷新和上拉加载了.</p>
 只需要重写Recyclerview的<code>onTouchEvent</code>和<code>onScrollStateChanged</code>方法就好了
 在这里有一点一定要注意, 不能仅仅在<code>MotionEvent.ACTION_DOWN</code>中取得坐标来计算差值, 在实际中ItemView可能会消费掉事件, 导致坐标值取不到出现错误, 所以要在TouchEvent中直接去坐标差值.
 关键代码如下:</p>
-<pre class='prettyprint linenums'><code class="java">    private float mDownY;
+<pre class='prettyprint linenums'><code class="java">    private float mDownY = -1;
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
+        if(mDownY == -1) mDownY = ev.getRawY();
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 mDownY = ev.getRawY();
@@ -208,6 +209,7 @@ So, 想用RecyclerView, 就只好自己实现下拉刷新和上拉加载了.</p>
                 }
                 break;
             default:
+                mDownY = -1;
                 if (isOnTop() &amp;&amp; isRefreshEnable &amp;&amp; mHeaderView.release() &amp;&amp;
                         mRecyclerListener != null) {
                     mRecyclerListener.onRefresh();
@@ -347,7 +349,27 @@ So, 想用RecyclerView, 就只好自己实现下拉刷新和上拉加载了.</p>
 </code></pre>
 
 <h3>分割线</h3>
-<p>RecyclerView中是没有ListView的分割线的, 我们要实现分割线效果就要自己实现Decoration</p></div>
+<p>RecyclerView中是没有ListView的分割线的, 我们要实现分割线效果就要自己实现Decoration</p>
+<pre class='prettyprint linenums'><code class="java">public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
+    private int space;
+
+    public SpacesItemDecoration(int space) {
+        this.space = space;
+    }
+
+    @Override
+    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+
+        // Add top margin only for the first item to avoid double space between items
+        if(parent.getChildLayoutPosition(view) &gt; 1 ||
+            parent.getChildLayoutPosition(view) &lt; parent.getChildCount())
+            outRect.top = space;
+    }
+}
+</code></pre>
+
+<h3>运行截图</h3>
+<p><img alt="" src="http://7xnv8n.com1.z0.glb.clouddn.com/laputa/maorecycler/maorecycler.gif" /></p></div>
     <div id="tags" class='text-right'>
     
         <a href="/tag/Android/" class="label label-info tags">Android</a>&nbsp;
